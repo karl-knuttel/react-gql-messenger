@@ -10,7 +10,7 @@ const ChatsStyles = styled.div`
 const Chats = () => {
 	return (
 		<ChatsStyles>
-			<p>chats</p>
+			<p>The chats go here...</p>
 		</ChatsStyles>
 	);
 };
