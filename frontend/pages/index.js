@@ -1,12 +1,12 @@
 import React from 'react';
 import TitleBar from '../components/TitleBar';
-import Chats from '../components/Chats';
+import Chat from '../components/Chat';
 import ChatInput from '../components/ChatInput';
 
 const Home = props => (
 	<div>
 		<TitleBar />
-		<Chats />
+		<Chat />
 		<ChatInput />
 	</div>
 );

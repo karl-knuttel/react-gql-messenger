@@ -3,3 +3,9 @@ type User {
     name: String!
     email: String!
 }
+
+type Message {
+    id: ID! @unique
+    text: String!
+    # user: User!
+}

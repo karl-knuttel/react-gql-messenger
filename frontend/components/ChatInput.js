@@ -1,35 +1,19 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
+import gql from 'graphql-tag';
+import { Mutation } from 'react-apollo';
+import StyledChatInput from './styles/ChatInput';
 
-const Form = styled.form`
-	position: absolute;
-	bottom  : 0;
-	left    : 0;
-	width   : 100%;
-	height  : 6rem;
-	padding : 0 2rem;
-	fieldset {
-		padding: 0;
-		margin : 0;
-		border : none;
-	}
-	input {
-		font-size    : 1.2rem;
-		width        : 100%;
-		height       : 4rem;
-		padding      : 1rem;
-		border       : 2px solid grey;
-		border-radius: 7px;
-		&:focus {
-			outline     : 0;
-			border-color: ${props => props.theme.colorPrimary};
+const CREATE_MESSAGE_MUTATION = gql`
+	mutation CREATE_MESSAGE_MUTATION($text: String!) {
+		createMessage(text: $text) {
+			id
 		}
 	}
 `;
 
 class ChatInput extends Component {
 	state = {
-		message: ''
+		text: ''
 	};
 
 	handleChange = e => {
@@ -39,19 +23,29 @@ class ChatInput extends Component {
 
 	render() {
 		return (
-			<Form>
-				<fieldset>
-					<input
-						name        = "message"
-						type        = "text"
-						id          = "message"
-						placeholder = "Start typing something"
-						value       = {this.state.message}
-						required
-						onChange = {this.handleChange}
-					/>
-				</fieldset>
-			</Form>
+			<Mutation mutation={CREATE_MESSAGE_MUTATION} variables={this.state}>
+				{(createMessage, { loading, error }) => (
+					<StyledChatInput
+						onSubmit={async e => {
+							e.preventDefault();
+							const res = await createMessage();
+							this.setState({ text: '' });
+						}}
+					>
+						<fieldset>
+							<input
+								name        = "text"
+								type        = "text"
+								id          = "text"
+								placeholder = "Start typing something"
+								value       = {this.state.text}
+								required
+								onChange = {this.handleChange}
+							/>
+						</fieldset>
+					</StyledChatInput>
+				)}
+			</Mutation>
 		);
 	}
 }
