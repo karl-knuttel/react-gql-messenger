@@ -10,7 +10,7 @@ const HeaderStyles = styled.div`
 const Logo = styled.h1`
 	font-family: hkconcentrate_bold;
 	position   : relative;
-	font-size  : 2rem;
+	font-size  : 1.6rem;
 	line-height: 1;
 	margin     : 0;
 	a {
