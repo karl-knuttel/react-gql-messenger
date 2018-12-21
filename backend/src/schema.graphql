@@ -1,5 +1,12 @@
 # import * from './generated/prisma.graphql'
 
+type Subscription {
+    # newMessage(where: MessageSubscriptionWhereInput): MessageSubscriptionPayload
+    # newMessage: MessageSubscriptionPayload
+    # message(where: MessageSubscriptionWhereInput): MessageSubscriptionPayload
+    newMessage: Message!
+}
+
 type Query {
     messages(where: MessageWhereInput, orderBy: MessageOrderByInput): [Message]!
 }

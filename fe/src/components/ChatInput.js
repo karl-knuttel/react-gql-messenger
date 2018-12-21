@@ -1,31 +1,14 @@
 import React, { Component } from 'react';
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
-import styled from 'styled-components';
-// import StyledChatInput from './styles/ChatInput';
-import { CURRENT_CHAT_QUERY } from './Chat';
+import { ChatInputBox } from './styles/ChatInput';
+// import { CURRENT_CHAT_QUERY } from './Chat';
 
 const CREATE_MESSAGE_MUTATION = gql`
     mutation CREATE_MESSAGE_MUTATION($text: String!) {
         createMessage(text: $text) {
             id
-        }
-    }
-`;
-
-const ChatInputBox = styled.div`
-    height : 8rem;
-    padding: 2rem 0 0;
-    input {
-        font-size    : 1.2rem;
-        width        : 100%;
-        height       : 4rem;
-        padding      : 1rem;
-        border       : 2px solid grey;
-        border-radius: 7px;
-        &:focus {
-            outline     : 0;
-            border-color: ${props => props.theme.colorPrimary};
+            text
         }
     }
 `;
@@ -38,9 +21,9 @@ class ChatInput extends Component {
     render() {
         return (
             <Mutation
-                mutation       = {CREATE_MESSAGE_MUTATION}
-                variables      = {this.state}
-                refetchQueries = {[{ query: CURRENT_CHAT_QUERY }]}
+                mutation  = {CREATE_MESSAGE_MUTATION}
+                variables = {this.state}
+                // refetchQueries = {[{ query: CURRENT_CHAT_QUERY }]}
             >
                 {(createMessage, { loading, error }) => (
                     <ChatInputBox
@@ -48,6 +31,7 @@ class ChatInput extends Component {
                             if (e.key === 'Enter') {
                                 e.preventDefault();
                                 const res = await createMessage();
+                                // await createMessage();
                                 this.setState({ text: '' });
                             }
                         }}

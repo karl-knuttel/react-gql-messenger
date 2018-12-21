@@ -1,0 +1,3 @@
+const PUBSUB_NEW_MESSAGE = 'PUBSUB_NEW_MESSAGE';
+
+module.exports = { PUBSUB_NEW_MESSAGE };

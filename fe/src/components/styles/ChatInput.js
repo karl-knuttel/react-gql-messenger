@@ -1,17 +1,8 @@
 import styled from 'styled-components';
 
-const ChatInput = styled.form`
-    position: absolute;
-    bottom  : 0;
-    left    : 0;
-    width   : 100%;
-    height  : 8rem;
-    padding : 0 2rem;
-    fieldset {
-        padding: 0;
-        margin : 2rem 0 0;
-        border : none;
-    }
+const ChatInputBox = styled.div`
+    height : 8rem;
+    padding: 2rem 0 0;
     input {
         font-size    : 1.2rem;
         width        : 100%;
@@ -26,4 +17,4 @@ const ChatInput = styled.form`
     }
 `;
 
-export default ChatInput;
+export { ChatInputBox };

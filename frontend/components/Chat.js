@@ -13,12 +13,11 @@ const CURRENT_CHAT_QUERY = gql`
 `;
 
 const ChatStyles = styled.div`
-    height: calc(100vh - 14rem);
-    /* background-color: red; */
+    height    : calc(100vh - 14rem);
     overflow-y: auto;
 `;
 
-const Chats = () => {
+const Chat = () => {
     return (
         <Query query={CURRENT_CHAT_QUERY}>
             {({ data: { messages }, loading, error }) => {
@@ -36,4 +35,5 @@ const Chats = () => {
     );
 };
 
-export default Chats;
+export default Chat;
+export { CURRENT_CHAT_QUERY };

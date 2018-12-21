@@ -1,8 +1,10 @@
+const { PUBSUB_NEW_MESSAGE } = require('../constants');
+
 const Mutation = {
-    async createMessage(parent, args, ctx, info) {
+    async createMessage(parent, args, { db, pubsub }, info) {
         // Check if logged in
 
-        const message = await ctx.db.mutation.createMessage(
+        const message = await db.mutation.createMessage(
             {
                 data: {
                     ...args
@@ -10,6 +12,10 @@ const Mutation = {
             },
             info
         );
+
+        pubsub.publish(PUBSUB_NEW_MESSAGE, {
+            newMessage: message
+        });
 
         return message;
     }
