@@ -31,24 +31,26 @@ const Chat = () => {
     return (
         <>
             <Query query={CURRENT_CHAT_QUERY}>
-                {/* {({ data: { messages }, loading, error, subscribeToMore }) => {
+                {({ data: { messages }, loading, error, subscribeToMore }) => {
                     if (loading) return <p>Loading...</p>;
                     if (error) return <p>Error!!</p>;
                     subscribeToMore({
                         document   : NEW_MESSAGES_SUB,
                         updateQuery: (prev, { subscriptionData }) => {
-                            console.log(subscriptionData.data.newMessage.text);
-                            const newMessages = [
-                                ...prev.messages,
-                                subscriptionData.data.newMessage
-                            ];
-                            const result = {
+                            console.log('prev: ', prev);
+                            console.log('subscriptionData: ', subscriptionData);
+                            if (!subscriptionData) return prev;
+
+                            return {
                                 ...prev,
-                                messages: newMessages
+                                messages: [
+                                    ...prev.messages,
+                                    subscriptionData.data.newMessage
+                                ]
                             };
-                            return result;
                         }
                     });
+
                     return (
                         <ChatStyles>
                             {messages.map(singleMessage => (
@@ -57,22 +59,8 @@ const Chat = () => {
                                 </p>
                             ))}
                         </ChatStyles>
-                    ); */}
-                ({{ subscribeToMore, ...result }} =>{' '}
-                {subscribeToMore({
-                    document   : NEW_MESSAGES_SUB,
-                    updateQuery: (prev, { subscriptionData }) => {
-                        if (!subscriptionData) return prev;
-                        const newMessages = subscriptionData.data.newMessage;
-
-                        return Object.assign({}, prev, {
-                            entry: {
-                                messages: [newMessages, ...prev.entry.messages]
-                            }
-                        });
-                    }
-                })}
-                ) }}
+                    );
+                }}
             </Query>
             {/* <Subscription subscription={NEW_MESSAGES_SUB}>
                 {data => {
