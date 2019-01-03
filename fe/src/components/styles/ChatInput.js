@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const ChatInputBox = styled.div`
-    height : 8rem;
+    height : 6rem;
     padding: 2rem 0 0;
     input {
         font-size    : 1.2rem;

@@ -30,8 +30,8 @@ class ChatInput extends Component {
                         onKeyPress={async e => {
                             if (e.key === 'Enter') {
                                 e.preventDefault();
-                                const res = await createMessage();
-                                // await createMessage();
+                                // const res = await createMessage();
+                                await createMessage();
                                 this.setState({ text: '' });
                             }
                         }}
