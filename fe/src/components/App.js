@@ -1,8 +1,10 @@
 import React from 'react';
-import styled, { ThemeProvider, injectGlobal } from 'styled-components';
+import { Switch, Route } from 'react-router-dom';
+import styled, { ThemeProvider, createGlobalStyle } from 'styled-components';
 import Header from './Header';
 import TitleBar from '../components/TitleBar';
 import Chat from '../components/Chat';
+import Signup from './Signup';
 
 const theme = {
     black         : '#002A32',
@@ -26,25 +28,7 @@ const Inner = styled.main`
     background-color: ${props => props.theme.superLightGrey};
 `;
 
-injectGlobal`
-    @font-face {
-        font-family: 'hkconcentrate_regular';
-        src        : url('fonts/HKConcentrate-Regular.woff2') format('woff2');
-        font-weight: normal;
-        font-style : normal;
-    }
-    @font-face {
-        font-family: 'hkconcentrate_medium';
-        src        : url('fonts/HKConcentrate-Medium.woff2') format('woff2');
-        font-weight: normal;
-        font-style : normal;
-    }
-    @font-face {
-        font-family: 'hkconcentrate_bold';
-        src        : url('fonts/HKConcentrate-Bold.woff2') format('woff2');
-        font-weight: normal;
-        font-style : normal;
-    }
+const GlobalStyle = createGlobalStyle`
     html {
         box-sizing: border-box;
         font-size : 10px;
@@ -72,13 +56,23 @@ injectGlobal`
     }
 `;
 
+const NotFound = () => <h1>Oops. That page doesn't exist!</h1>;
+
 const App = props => (
     <ThemeProvider theme={theme}>
         <StyledPage>
+            <GlobalStyle />
             <Header />
             <Inner>
                 <TitleBar />
-                <Chat />
+                {/* <Chat /> */}
+                {/* <Signup />
+                <Signup /> */}
+                <Switch>
+                    <Route path="/chat/:id" component={Chat} />
+                    <Route exact path="/login" component={Signup} />
+                    <Route component={NotFound} />
+                </Switch>
             </Inner>
         </StyledPage>
     </ThemeProvider>

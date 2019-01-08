@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
 import { ApolloClient } from 'apollo-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { createUploadLink } from 'apollo-upload-client';
-// import { HttpLink } from 'apollo-link-http';
 import { split } from 'apollo-link';
 import { WebSocketLink } from 'apollo-link-ws';
 import { getMainDefinition } from 'apollo-utilities';
@@ -15,9 +15,6 @@ const httpLink = createUploadLink({
     uri        : `http://localhost:5555`,
     credentials: 'include'
 });
-// const httpLink = new HttpLink({
-//     uri: 'http://localhost:5555'
-// });
 
 // Create a WebSocket link:
 const wsLink = new WebSocketLink({
@@ -45,8 +42,10 @@ const client = new ApolloClient({
 });
 
 ReactDOM.render(
-    <ApolloProvider client={client}>
-        <App />
-    </ApolloProvider>,
+    <BrowserRouter>
+        <ApolloProvider client={client}>
+            <App />
+        </ApolloProvider>
+    </BrowserRouter>,
     document.getElementById('root')
 );

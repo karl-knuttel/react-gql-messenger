@@ -2,6 +2,7 @@ type User {
     id: ID! @unique
     name: String!
     email: String!
+    password: String!
 }
 
 type Message {

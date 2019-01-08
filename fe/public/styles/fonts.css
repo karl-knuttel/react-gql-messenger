@@ -1,0 +1,18 @@
+@font-face {
+    font-family: 'hkconcentrate_regular';
+    src        : url('fonts/HKConcentrate-Regular.woff2') format('woff2');
+    font-weight: normal;
+    font-style : normal;
+}
+@font-face {
+    font-family: 'hkconcentrate_medium';
+    src        : url('fonts/HKConcentrate-Medium.woff2') format('woff2');
+    font-weight: normal;
+    font-style : normal;
+}
+@font-face {
+    font-family: 'hkconcentrate_bold';
+    src        : url('fonts/HKConcentrate-Bold.woff2') format('woff2');
+    font-weight: normal;
+    font-style : normal;
+}
