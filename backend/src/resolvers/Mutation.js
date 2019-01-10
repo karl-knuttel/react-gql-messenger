@@ -21,6 +21,39 @@ const Mutation = {
 
         return message;
     },
+    // async createConversation(parent, args, ctx, info) {
+    //     const newConversation = await ctx.db.mutation.createConversation(
+    //         {
+    //             data: {
+    //                 users: {
+    //                     connect: [{ id: args.userId }]
+    //                 }
+    //             }
+    //         },
+    //         info
+    //     );
+    //     return newConversation;
+
+    //     console.log(args);
+    //     return;
+    // },
+    async createConversation(parent, { users }, ctx, info) {
+        const conversation = await ctx.db.mutation.createConversation(
+            {
+                data: {
+                    users: {
+                        connect: [...users.map(username => ({ username }))]
+                    }
+                }
+            },
+            info
+        );
+
+        console.log(conversation);
+
+        return conversation;
+    },
+
     async signup(parent, args, ctx, info) {
         // lowercase their email
         args.email = args.email.toLowerCase();
@@ -44,6 +77,27 @@ const Mutation = {
             maxAge  : 1000 * 60 * 60 * 24 * 365  // 1 year cookie
         });
         // return user to the browser
+        return user;
+    },
+    async signin(parent, { email, password }, ctx, info) {
+        // Check if user with that email exists
+        const user = await ctx.db.query.user({ where: { email } });
+        if (!user) {
+            throw new Error(`No such user found for email ${email}`);
+        }
+        // check if their p/w is correct
+        const valid = await bcrypt.compare(password, user.password);
+        if (!valid) {
+            throw new Error('Invalid password!');
+        }
+        // generate a JWT token
+        const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
+        //set the cookie with the token
+        ctx.response.cookie('token', token, {
+            httpOnly: true,
+            maxAge  : 1000 * 60 * 60 * 24 * 365
+        });
+        // return the user
         return user;
     }
 };

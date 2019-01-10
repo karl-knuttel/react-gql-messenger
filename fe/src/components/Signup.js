@@ -1,29 +1,41 @@
 import React, { Component } from 'react';
 import { Mutation } from 'react-apollo';
+import { withRouter } from 'react-router-dom';
 import gql from 'graphql-tag';
 // import Form from './styles/Form';
 // import Error from './ErrorMessage';
-// import { CURRENT_USER_QUERY } from './User';
+import { CURRENT_USER_QUERY } from './User';
 
 const SIGNUP_MUTATION = gql`
     mutation SIGNUP_MUTATION(
-        $email   : String!
-        $name    : String!
-        $password: String!
+        $email    : String!
+        $firstname: String!
+        $lastname : String!
+        $password : String!
+        $username : String!
     ) {
-        signup(email: $email, name: $name, password: $password) {
+        signup(
+            email    : $email
+            firstname: $firstname
+            lastname : $lastname
+            password : $password
+            username : $username
+        ) {
             id
             email
-            name
+            firstname
+            username
         }
     }
 `;
 
 class Signup extends Component {
     state = {
-        name    : '',
-        email   : '',
-        password: ''
+        email    : '',
+        firstname: '',
+        lastname : '',
+        password : '',
+        username : ''
     };
 
     saveToState = e => {
@@ -33,9 +45,10 @@ class Signup extends Component {
     render() {
         return (
             <Mutation
-                mutation  = {SIGNUP_MUTATION}
-                variables = {this.state}
-                // refetchQueries = {[{ query: CURRENT_USER_QUERY }]}
+                mutation       = {SIGNUP_MUTATION}
+                variables      = {this.state}
+                refetchQueries = {[{ query: CURRENT_USER_QUERY }]}
+                onCompleted    = {() => this.props.history.push('/')}
             >
                 {(signup, { error, loading }) => {
                     return (
@@ -45,15 +58,47 @@ class Signup extends Component {
                                 e.preventDefault();
                                 await signup();
                                 this.setState({
-                                    email   : '',
-                                    name    : '',
-                                    password: ''
+                                    email    : '',
+                                    firstname: '',
+                                    lastname : '',
+                                    password : '',
+                                    username : ''
                                 });
                             }}
                         >
                             <fieldset disabled={loading} aria-busy={loading}>
                                 <h2>Sign Up for an account</h2>
                                 {/* <Error error={error} /> */}
+                                <label htmlFor="firstname">
+                                    First Name
+                                    <input
+                                        type        = "text"
+                                        name        = "firstname"
+                                        placeholder = "First Name"
+                                        value       = {this.state.firstname}
+                                        onChange    = {this.saveToState}
+                                    />
+                                </label>
+                                <label htmlFor="lastname">
+                                    Last Name
+                                    <input
+                                        type        = "text"
+                                        name        = "lastname"
+                                        placeholder = "Last Name"
+                                        value       = {this.state.lastname}
+                                        onChange    = {this.saveToState}
+                                    />
+                                </label>
+                                <label htmlFor="username">
+                                    Choose a username
+                                    <input
+                                        type        = "text"
+                                        name        = "username"
+                                        placeholder = "Username"
+                                        value       = {this.state.username}
+                                        onChange    = {this.saveToState}
+                                    />
+                                </label>
                                 <label htmlFor="email">
                                     Email
                                     <input
@@ -61,16 +106,6 @@ class Signup extends Component {
                                         name        = "email"
                                         placeholder = "email"
                                         value       = {this.state.email}
-                                        onChange    = {this.saveToState}
-                                    />
-                                </label>
-                                <label htmlFor="name">
-                                    Name
-                                    <input
-                                        type        = "text"
-                                        name        = "name"
-                                        placeholder = "name"
-                                        value       = {this.state.name}
                                         onChange    = {this.saveToState}
                                     />
                                 </label>
@@ -94,4 +129,4 @@ class Signup extends Component {
     }
 }
 
-export default Signup;
+export default withRouter(Signup);

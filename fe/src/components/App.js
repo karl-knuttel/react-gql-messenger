@@ -1,10 +1,7 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
 import styled, { ThemeProvider, createGlobalStyle } from 'styled-components';
 import Header from './Header';
-import TitleBar from '../components/TitleBar';
-import Chat from '../components/Chat';
-import Signup from './Signup';
+import PageBody from './PageBody';
 
 const theme = {
     black         : '#002A32',
@@ -19,13 +16,6 @@ const StyledPage = styled.div`
     color                : ${props => props.theme.black};
     display              : grid;
     grid-template-columns: auto 1fr;
-`;
-
-const Inner = styled.main`
-    max-width       : ${props => props.theme.maxWidth};
-    padding         : 2rem;
-    position        : relative;
-    background-color: ${props => props.theme.superLightGrey};
 `;
 
 const GlobalStyle = createGlobalStyle`
@@ -56,25 +46,15 @@ const GlobalStyle = createGlobalStyle`
     }
 `;
 
-const NotFound = () => <h1>Oops. That page doesn't exist!</h1>;
-
 const App = props => (
     <ThemeProvider theme={theme}>
-        <StyledPage>
+        <>
             <GlobalStyle />
-            <Header />
-            <Inner>
-                <TitleBar />
-                {/* <Chat /> */}
-                {/* <Signup />
-                <Signup /> */}
-                <Switch>
-                    <Route path="/chat/:id" component={Chat} />
-                    <Route exact path="/login" component={Signup} />
-                    <Route component={NotFound} />
-                </Switch>
-            </Inner>
-        </StyledPage>
+            <StyledPage>
+                <Header />
+                <PageBody />
+            </StyledPage>
+        </>
     </ThemeProvider>
 );
 
