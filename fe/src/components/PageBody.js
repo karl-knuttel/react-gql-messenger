@@ -5,7 +5,8 @@ import User from './User';
 import TitleBar from './TitleBar';
 import Chat from './Chat';
 import Login from './Login';
-import CreateChat from './CreateChat';
+import CreateConversation from './CreateConversation';
+import NewConversation from './NewConversation';
 
 const PageBodyStyles = styled.main`
     max-width       : ${props => props.theme.maxWidth};
@@ -33,7 +34,8 @@ const PageBody = () => (
                 </>
             )}
         </User> */}
-        <CreateChat />
+        {/* <CreateConversation /> */}
+        <NewConversation />
     </PageBodyStyles>
 );
 

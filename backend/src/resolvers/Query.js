@@ -1,6 +1,7 @@
 const { forwardTo } = require('prisma-binding');
 
 const Query = {
+    users   : forwardTo('db'),
     messages: forwardTo('db'),
     me(parent, args, ctx, info) {
         if (!ctx.request.userId) {

@@ -10,7 +10,7 @@ const CREATE_CONVERSATION_MUTATION = gql`
     }
 `;
 
-class CreateChat extends Component {
+class CreateConversation extends Component {
     state = {
         // users: ['pinksoir', 'imginaliu']
         username1: '',
@@ -81,4 +81,4 @@ class CreateChat extends Component {
     }
 }
 
-export default CreateChat;
+export default CreateConversation;

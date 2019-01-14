@@ -14,9 +14,10 @@ type Mutation {
 }
 
 type Query {
+    users(where: UserWhereInput, orderBy: UserOrderByInput): [User]!
     messages(where: MessageWhereInput, orderBy: MessageOrderByInput): [Message]!
     me: User
-    users: [User]!
+    # users: [User]!
     # messages: [Message]!
 }
 
