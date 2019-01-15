@@ -21,28 +21,12 @@ const Mutation = {
 
         return message;
     },
-    // async createConversation(parent, args, ctx, info) {
-    //     const newConversation = await ctx.db.mutation.createConversation(
-    //         {
-    //             data: {
-    //                 users: {
-    //                     connect: [{ id: args.userId }]
-    //                 }
-    //             }
-    //         },
-    //         info
-    //     );
-    //     return newConversation;
-
-    //     console.log(args);
-    //     return;
-    // },
     async createConversation(parent, { users }, ctx, info) {
         const conversation = await ctx.db.mutation.createConversation(
             {
                 data: {
                     users: {
-                        connect: [...users.map(username => ({ username }))]
+                        connect: [...users.map(id => ({ id }))]
                     }
                 }
             },
@@ -53,7 +37,6 @@ const Mutation = {
 
         return conversation;
     },
-
     async signup(parent, args, ctx, info) {
         // lowercase their email
         args.email = args.email.toLowerCase();

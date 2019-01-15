@@ -2,6 +2,9 @@ import React from 'react';
 import gql from 'graphql-tag';
 import { ApolloConsumer } from 'react-apollo';
 import debounce from 'lodash.debounce';
+import NewConversationUsersList from './NewConversationUsersList';
+import NewConversationSelectedUsers from './NewConversationSelectedUsers';
+import NewConversationSubmit from './NewConversationSubmit';
 
 const SEARCH_USERS_QUERY = gql`
     query SEARCH_USERS_QUERY($searchTerm: String!) {
@@ -43,15 +46,50 @@ class NewConversation extends React.Component {
         });
     }, 350);
 
-    addUser = username => {
+    addUser = user => {
+        const { id, firstname, lastname, username } = user;
         this.setState({
-            selectedUsers: [...this.state.selectedUsers, username]
+            selectedUsers: [
+                ...this.state.selectedUsers,
+                { id, firstname, lastname, username }
+            ]
         });
     };
+
+    removeUser = user => {
+        let array = [...this.state.selectedUsers];
+        let index = array.indexOf(user);
+        if (index !== -1) {
+            array.splice(index, 1);
+            this.setState({ selectedUsers: array });
+        }
+    };
+
+    componentWillMount() {
+        const { id, firstname, lastname, username } = this.props.currentUser;
+        this.setState({
+            selectedUsers: [{ id, firstname, lastname, username }]
+        });
+    }
 
     render() {
         return (
             <div>
+                <div>
+                    <NewConversationSelectedUsers
+                        selectedUsers = {this.state.selectedUsers}
+                        currentUser   = {this.props.currentUser}
+                        removeUser    = {this.removeUser}
+                    />
+                    {/* {this.state.selectedUsers.length > 1 && ( */}
+                    <NewConversationSubmit
+                        users={this.state.selectedUsers.map(user => {
+                            return user.id;
+                        })}
+                    />
+                    {/* )} */}
+                </div>
+
                 <ApolloConsumer>
                     {client => (
                         <input
@@ -65,29 +103,11 @@ class NewConversation extends React.Component {
                     )}
                 </ApolloConsumer>
 
-                <div>
-                    {this.state.users.map(user => (
-                        <div key={user.id}>
-                            {user.firstname} {user.lastname} ({user.username})
-                            {/* <button onClick={() => this.addUser(user.username)}> */}
-                            {!this.state.selectedUsers.indexOf(user.username) >
-                                -1 && (
-                                <button
-                                    onClick={() =>
-                                        this.setState({
-                                            selectedUsers: [
-                                                ...this.state.selectedUsers,
-                                                user.username
-                                            ]
-                                        })
-                                    }
-                                >
-                                    Add User
-                                </button>
-                            )}
-                        </div>
-                    ))}
-                </div>
+                <NewConversationUsersList
+                    users         = {this.state.users}
+                    selectedUsers = {this.state.selectedUsers}
+                    addUser       = {this.addUser}
+                />
             </div>
         );
     }

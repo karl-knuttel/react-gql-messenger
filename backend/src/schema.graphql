@@ -2,7 +2,7 @@
 
 type Mutation {
     createMessage(text: String!): Message!
-    createConversation(users: [String!]!): Conversation
+    createConversation(users: [ID!]!): Conversation
     signup(
         email: String!
         password: String!

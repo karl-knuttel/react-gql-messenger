@@ -9,6 +9,7 @@ const CURRENT_USER_QUERY = gql`
             id
             email
             firstname
+            lastname
             username
         }
     }
