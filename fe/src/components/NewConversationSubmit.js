@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mutation, ApolloConsumer } from 'react-apollo';
+import { ApolloConsumer } from 'react-apollo';
 import gql from 'graphql-tag';
 import { withRouter } from 'react-router';
 

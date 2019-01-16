@@ -3,21 +3,46 @@ const bcrypt = require('bcryptjs');
 const jwt    = require('jsonwebtoken');
 
 const Mutation = {
-    async createMessage(parent, args, { db, pubsub }, info) {
-        // Check if logged in
+    // async createMessage(parent, args, { db, pubsub }, info) {
+    //     // Check if logged in
+    //     if (!ctx.request.userId) {
+    //         throw new Error('You must be logged in to do that!');
+    //     }
 
+    //     const message = await db.mutation.createMessage(
+    //         {
+    //             data: {
+    //                 ...args
+    //             }
+    //         },
+    //         info
+    //     );
+
+    //     pubsub.publish(PUBSUB_NEW_MESSAGE, {
+    //         newMessage: message
+    //     });
+
+    //     return message;
+    // },
+    async createMessage(parent, args, { db, request, pubsub }, info) {
         const message = await db.mutation.createMessage(
             {
                 data: {
+                    user: {
+                        connect: {
+                            id: request.userId
+                        }
+                    },
+                    conversation: {
+                        connect: {
+                            id: args.conversation
+                        }
+                    },
                     ...args
                 }
             },
             info
         );
-
-        pubsub.publish(PUBSUB_NEW_MESSAGE, {
-            newMessage: message
-        });
 
         return message;
     },
@@ -28,6 +53,7 @@ const Mutation = {
                     users: {
                         connect: [...users.map(id => ({ id }))]
                     }
+                    // ...args
                 }
             },
             info

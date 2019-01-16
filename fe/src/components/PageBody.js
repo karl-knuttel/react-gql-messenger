@@ -5,6 +5,7 @@ import User from './User';
 // import TitleBar from './TitleBar';
 import Chat from './Chat';
 import Login from './Login';
+import Conversation from './Conversation';
 import NewConversation from './NewConversation';
 
 const PageBodyStyles = styled.main`
@@ -33,7 +34,10 @@ const PageBody = () => (
                                     />
                                 )}
                             />
-                            <Route path="/conversations/:id" component={Chat} />
+                            <Route
+                                path      = "/conversations/:id"
+                                component = {Conversation}
+                            />
                             <Route component={NotFound} />
                         </Switch>
                     )}

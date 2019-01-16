@@ -1,7 +1,8 @@
 # import * from './generated/prisma.graphql'
 
 type Mutation {
-    createMessage(text: String!): Message!
+    # createMessage(text: String!): Message!
+    createMessage(text: String!, conversation: ID!): Message!
     createConversation(users: [ID!]!): Conversation
     signup(
         email: String!

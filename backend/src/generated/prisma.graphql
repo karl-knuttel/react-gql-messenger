@@ -1,5 +1,5 @@
 # source: https://eu1.prisma.sh/karlknuttel-0a50b9/gql-messenger-be/dev
-# timestamp: Thu Jan 10 2019 17:03:05 GMT+0100 (CET)
+# timestamp: Wed Jan 16 2019 17:12:45 GMT+0100 (CET)
 
 type AggregateConversation {
   count: Int!
@@ -21,6 +21,7 @@ type BatchPayload {
 type Conversation implements Node {
   id: ID!
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  messages(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Message!]
 }
 
 """A connection to a list of items."""
@@ -34,7 +35,17 @@ type ConversationConnection {
 }
 
 input ConversationCreateInput {
-  users: UserCreateManyInput
+  users: UserCreateManyWithoutConversationsInput
+  messages: MessageCreateManyInput
+}
+
+input ConversationCreateManyWithoutUsersInput {
+  create: [ConversationCreateWithoutUsersInput!]
+  connect: [ConversationWhereUniqueInput!]
+}
+
+input ConversationCreateWithoutUsersInput {
+  messages: MessageCreateManyInput
 }
 
 """An edge in a connection."""
@@ -57,6 +68,57 @@ enum ConversationOrderByInput {
 
 type ConversationPreviousValues {
   id: ID!
+}
+
+input ConversationScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [ConversationScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [ConversationScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [ConversationScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
 }
 
 type ConversationSubscriptionPayload {
@@ -99,7 +161,34 @@ input ConversationSubscriptionWhereInput {
 }
 
 input ConversationUpdateInput {
-  users: UserUpdateManyInput
+  users: UserUpdateManyWithoutConversationsInput
+  messages: MessageUpdateManyInput
+}
+
+input ConversationUpdateManyWithoutUsersInput {
+  create: [ConversationCreateWithoutUsersInput!]
+  connect: [ConversationWhereUniqueInput!]
+  set: [ConversationWhereUniqueInput!]
+  disconnect: [ConversationWhereUniqueInput!]
+  delete: [ConversationWhereUniqueInput!]
+  update: [ConversationUpdateWithWhereUniqueWithoutUsersInput!]
+  deleteMany: [ConversationScalarWhereInput!]
+  upsert: [ConversationUpsertWithWhereUniqueWithoutUsersInput!]
+}
+
+input ConversationUpdateWithoutUsersDataInput {
+  messages: MessageUpdateManyInput
+}
+
+input ConversationUpdateWithWhereUniqueWithoutUsersInput {
+  where: ConversationWhereUniqueInput!
+  data: ConversationUpdateWithoutUsersDataInput!
+}
+
+input ConversationUpsertWithWhereUniqueWithoutUsersInput {
+  where: ConversationWhereUniqueInput!
+  update: ConversationUpdateWithoutUsersDataInput!
+  create: ConversationCreateWithoutUsersInput!
 }
 
 input ConversationWhereInput {
@@ -154,6 +243,9 @@ input ConversationWhereInput {
   users_every: UserWhereInput
   users_some: UserWhereInput
   users_none: UserWhereInput
+  messages_every: MessageWhereInput
+  messages_some: MessageWhereInput
+  messages_none: MessageWhereInput
 }
 
 input ConversationWhereUniqueInput {
@@ -169,6 +261,8 @@ scalar Long
 type Message implements Node {
   id: ID!
   text: String!
+  user: User!
+  conversation: ID!
 }
 
 """A connection to a list of items."""
@@ -183,6 +277,23 @@ type MessageConnection {
 
 input MessageCreateInput {
   text: String!
+  conversation: ID!
+  user: UserCreateOneWithoutMessagesInput!
+}
+
+input MessageCreateManyInput {
+  create: [MessageCreateInput!]
+  connect: [MessageWhereUniqueInput!]
+}
+
+input MessageCreateManyWithoutUserInput {
+  create: [MessageCreateWithoutUserInput!]
+  connect: [MessageWhereUniqueInput!]
+}
+
+input MessageCreateWithoutUserInput {
+  text: String!
+  conversation: ID!
 }
 
 """An edge in a connection."""
@@ -199,6 +310,8 @@ enum MessageOrderByInput {
   id_DESC
   text_ASC
   text_DESC
+  conversation_ASC
+  conversation_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -208,6 +321,138 @@ enum MessageOrderByInput {
 type MessagePreviousValues {
   id: ID!
   text: String!
+  conversation: ID!
+}
+
+input MessageScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [MessageScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [MessageScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [MessageScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  text: String
+
+  """All values that are not equal to given value."""
+  text_not: String
+
+  """All values that are contained in given list."""
+  text_in: [String!]
+
+  """All values that are not contained in given list."""
+  text_not_in: [String!]
+
+  """All values less than the given value."""
+  text_lt: String
+
+  """All values less than or equal the given value."""
+  text_lte: String
+
+  """All values greater than the given value."""
+  text_gt: String
+
+  """All values greater than or equal the given value."""
+  text_gte: String
+
+  """All values containing the given string."""
+  text_contains: String
+
+  """All values not containing the given string."""
+  text_not_contains: String
+
+  """All values starting with the given string."""
+  text_starts_with: String
+
+  """All values not starting with the given string."""
+  text_not_starts_with: String
+
+  """All values ending with the given string."""
+  text_ends_with: String
+
+  """All values not ending with the given string."""
+  text_not_ends_with: String
+  conversation: ID
+
+  """All values that are not equal to given value."""
+  conversation_not: ID
+
+  """All values that are contained in given list."""
+  conversation_in: [ID!]
+
+  """All values that are not contained in given list."""
+  conversation_not_in: [ID!]
+
+  """All values less than the given value."""
+  conversation_lt: ID
+
+  """All values less than or equal the given value."""
+  conversation_lte: ID
+
+  """All values greater than the given value."""
+  conversation_gt: ID
+
+  """All values greater than or equal the given value."""
+  conversation_gte: ID
+
+  """All values containing the given string."""
+  conversation_contains: ID
+
+  """All values not containing the given string."""
+  conversation_not_contains: ID
+
+  """All values starting with the given string."""
+  conversation_starts_with: ID
+
+  """All values not starting with the given string."""
+  conversation_not_starts_with: ID
+
+  """All values ending with the given string."""
+  conversation_ends_with: ID
+
+  """All values not ending with the given string."""
+  conversation_not_ends_with: ID
 }
 
 type MessageSubscriptionPayload {
@@ -249,12 +494,82 @@ input MessageSubscriptionWhereInput {
   node: MessageWhereInput
 }
 
+input MessageUpdateDataInput {
+  text: String
+  conversation: ID
+  user: UserUpdateOneRequiredWithoutMessagesInput
+}
+
 input MessageUpdateInput {
   text: String
+  conversation: ID
+  user: UserUpdateOneRequiredWithoutMessagesInput
+}
+
+input MessageUpdateManyDataInput {
+  text: String
+  conversation: ID
+}
+
+input MessageUpdateManyInput {
+  create: [MessageCreateInput!]
+  connect: [MessageWhereUniqueInput!]
+  set: [MessageWhereUniqueInput!]
+  disconnect: [MessageWhereUniqueInput!]
+  delete: [MessageWhereUniqueInput!]
+  update: [MessageUpdateWithWhereUniqueNestedInput!]
+  updateMany: [MessageUpdateManyWithWhereNestedInput!]
+  deleteMany: [MessageScalarWhereInput!]
+  upsert: [MessageUpsertWithWhereUniqueNestedInput!]
 }
 
 input MessageUpdateManyMutationInput {
   text: String
+  conversation: ID
+}
+
+input MessageUpdateManyWithoutUserInput {
+  create: [MessageCreateWithoutUserInput!]
+  connect: [MessageWhereUniqueInput!]
+  set: [MessageWhereUniqueInput!]
+  disconnect: [MessageWhereUniqueInput!]
+  delete: [MessageWhereUniqueInput!]
+  update: [MessageUpdateWithWhereUniqueWithoutUserInput!]
+  updateMany: [MessageUpdateManyWithWhereNestedInput!]
+  deleteMany: [MessageScalarWhereInput!]
+  upsert: [MessageUpsertWithWhereUniqueWithoutUserInput!]
+}
+
+input MessageUpdateManyWithWhereNestedInput {
+  where: MessageScalarWhereInput!
+  data: MessageUpdateManyDataInput!
+}
+
+input MessageUpdateWithoutUserDataInput {
+  text: String
+  conversation: ID
+}
+
+input MessageUpdateWithWhereUniqueNestedInput {
+  where: MessageWhereUniqueInput!
+  data: MessageUpdateDataInput!
+}
+
+input MessageUpdateWithWhereUniqueWithoutUserInput {
+  where: MessageWhereUniqueInput!
+  data: MessageUpdateWithoutUserDataInput!
+}
+
+input MessageUpsertWithWhereUniqueNestedInput {
+  where: MessageWhereUniqueInput!
+  update: MessageUpdateDataInput!
+  create: MessageCreateInput!
+}
+
+input MessageUpsertWithWhereUniqueWithoutUserInput {
+  where: MessageWhereUniqueInput!
+  update: MessageUpdateWithoutUserDataInput!
+  create: MessageCreateWithoutUserInput!
 }
 
 input MessageWhereInput {
@@ -346,6 +661,47 @@ input MessageWhereInput {
 
   """All values not ending with the given string."""
   text_not_ends_with: String
+  conversation: ID
+
+  """All values that are not equal to given value."""
+  conversation_not: ID
+
+  """All values that are contained in given list."""
+  conversation_in: [ID!]
+
+  """All values that are not contained in given list."""
+  conversation_not_in: [ID!]
+
+  """All values less than the given value."""
+  conversation_lt: ID
+
+  """All values less than or equal the given value."""
+  conversation_lte: ID
+
+  """All values greater than the given value."""
+  conversation_gt: ID
+
+  """All values greater than or equal the given value."""
+  conversation_gte: ID
+
+  """All values containing the given string."""
+  conversation_contains: ID
+
+  """All values not containing the given string."""
+  conversation_not_contains: ID
+
+  """All values starting with the given string."""
+  conversation_starts_with: ID
+
+  """All values not starting with the given string."""
+  conversation_not_starts_with: ID
+
+  """All values ending with the given string."""
+  conversation_ends_with: ID
+
+  """All values not ending with the given string."""
+  conversation_not_ends_with: ID
+  user: UserWhereInput
 }
 
 input MessageWhereUniqueInput {
@@ -353,23 +709,23 @@ input MessageWhereUniqueInput {
 }
 
 type Mutation {
-  createMessage(data: MessageCreateInput!): Message!
-  createConversation(data: ConversationCreateInput!): Conversation!
   createUser(data: UserCreateInput!): User!
-  updateMessage(data: MessageUpdateInput!, where: MessageWhereUniqueInput!): Message
-  updateConversation(data: ConversationUpdateInput!, where: ConversationWhereUniqueInput!): Conversation
+  createConversation(data: ConversationCreateInput!): Conversation!
+  createMessage(data: MessageCreateInput!): Message!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
-  deleteMessage(where: MessageWhereUniqueInput!): Message
-  deleteConversation(where: ConversationWhereUniqueInput!): Conversation
+  updateConversation(data: ConversationUpdateInput!, where: ConversationWhereUniqueInput!): Conversation
+  updateMessage(data: MessageUpdateInput!, where: MessageWhereUniqueInput!): Message
   deleteUser(where: UserWhereUniqueInput!): User
-  upsertMessage(where: MessageWhereUniqueInput!, create: MessageCreateInput!, update: MessageUpdateInput!): Message!
-  upsertConversation(where: ConversationWhereUniqueInput!, create: ConversationCreateInput!, update: ConversationUpdateInput!): Conversation!
+  deleteConversation(where: ConversationWhereUniqueInput!): Conversation
+  deleteMessage(where: MessageWhereUniqueInput!): Message
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
-  updateManyMessages(data: MessageUpdateManyMutationInput!, where: MessageWhereInput): BatchPayload!
+  upsertConversation(where: ConversationWhereUniqueInput!, create: ConversationCreateInput!, update: ConversationUpdateInput!): Conversation!
+  upsertMessage(where: MessageWhereUniqueInput!, create: MessageCreateInput!, update: MessageUpdateInput!): Message!
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
-  deleteManyMessages(where: MessageWhereInput): BatchPayload!
-  deleteManyConversations(where: ConversationWhereInput): BatchPayload!
+  updateManyMessages(data: MessageUpdateManyMutationInput!, where: MessageWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
+  deleteManyConversations(where: ConversationWhereInput): BatchPayload!
+  deleteManyMessages(where: MessageWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -400,15 +756,15 @@ type PageInfo {
 }
 
 type Query {
-  messages(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Message]!
-  conversations(where: ConversationWhereInput, orderBy: ConversationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Conversation]!
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
-  message(where: MessageWhereUniqueInput!): Message
-  conversation(where: ConversationWhereUniqueInput!): Conversation
+  conversations(where: ConversationWhereInput, orderBy: ConversationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Conversation]!
+  messages(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Message]!
   user(where: UserWhereUniqueInput!): User
-  messagesConnection(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): MessageConnection!
-  conversationsConnection(where: ConversationWhereInput, orderBy: ConversationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ConversationConnection!
+  conversation(where: ConversationWhereUniqueInput!): Conversation
+  message(where: MessageWhereUniqueInput!): Message
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
+  conversationsConnection(where: ConversationWhereInput, orderBy: ConversationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ConversationConnection!
+  messagesConnection(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): MessageConnection!
 
   """Fetches an object given its ID"""
   node(
@@ -418,9 +774,9 @@ type Query {
 }
 
 type Subscription {
-  message(where: MessageSubscriptionWhereInput): MessageSubscriptionPayload
-  conversation(where: ConversationSubscriptionWhereInput): ConversationSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+  conversation(where: ConversationSubscriptionWhereInput): ConversationSubscriptionPayload
+  message(where: MessageSubscriptionWhereInput): MessageSubscriptionPayload
 }
 
 type User implements Node {
@@ -430,6 +786,8 @@ type User implements Node {
   username: String!
   email: String!
   password: String!
+  conversations(where: ConversationWhereInput, orderBy: ConversationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Conversation!]
+  messages(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Message!]
 }
 
 """A connection to a list of items."""
@@ -448,11 +806,36 @@ input UserCreateInput {
   username: String!
   email: String!
   password: String!
+  conversations: ConversationCreateManyWithoutUsersInput
+  messages: MessageCreateManyWithoutUserInput
 }
 
-input UserCreateManyInput {
-  create: [UserCreateInput!]
+input UserCreateManyWithoutConversationsInput {
+  create: [UserCreateWithoutConversationsInput!]
   connect: [UserWhereUniqueInput!]
+}
+
+input UserCreateOneWithoutMessagesInput {
+  create: UserCreateWithoutMessagesInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateWithoutConversationsInput {
+  firstname: String!
+  lastname: String!
+  username: String!
+  email: String!
+  password: String!
+  messages: MessageCreateManyWithoutUserInput
+}
+
+input UserCreateWithoutMessagesInput {
+  firstname: String!
+  lastname: String!
+  username: String!
+  email: String!
+  password: String!
+  conversations: ConversationCreateManyWithoutUsersInput
 }
 
 """An edge in a connection."""
@@ -782,20 +1165,14 @@ input UserSubscriptionWhereInput {
   node: UserWhereInput
 }
 
-input UserUpdateDataInput {
-  firstname: String
-  lastname: String
-  username: String
-  email: String
-  password: String
-}
-
 input UserUpdateInput {
   firstname: String
   lastname: String
   username: String
   email: String
   password: String
+  conversations: ConversationUpdateManyWithoutUsersInput
+  messages: MessageUpdateManyWithoutUserInput
 }
 
 input UserUpdateManyDataInput {
@@ -806,18 +1183,6 @@ input UserUpdateManyDataInput {
   password: String
 }
 
-input UserUpdateManyInput {
-  create: [UserCreateInput!]
-  connect: [UserWhereUniqueInput!]
-  set: [UserWhereUniqueInput!]
-  disconnect: [UserWhereUniqueInput!]
-  delete: [UserWhereUniqueInput!]
-  update: [UserUpdateWithWhereUniqueNestedInput!]
-  updateMany: [UserUpdateManyWithWhereNestedInput!]
-  deleteMany: [UserScalarWhereInput!]
-  upsert: [UserUpsertWithWhereUniqueNestedInput!]
-}
-
 input UserUpdateManyMutationInput {
   firstname: String
   lastname: String
@@ -826,20 +1191,62 @@ input UserUpdateManyMutationInput {
   password: String
 }
 
+input UserUpdateManyWithoutConversationsInput {
+  create: [UserCreateWithoutConversationsInput!]
+  connect: [UserWhereUniqueInput!]
+  set: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  delete: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutConversationsInput!]
+  updateMany: [UserUpdateManyWithWhereNestedInput!]
+  deleteMany: [UserScalarWhereInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutConversationsInput!]
+}
+
 input UserUpdateManyWithWhereNestedInput {
   where: UserScalarWhereInput!
   data: UserUpdateManyDataInput!
 }
 
-input UserUpdateWithWhereUniqueNestedInput {
-  where: UserWhereUniqueInput!
-  data: UserUpdateDataInput!
+input UserUpdateOneRequiredWithoutMessagesInput {
+  create: UserCreateWithoutMessagesInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateWithoutMessagesDataInput
+  upsert: UserUpsertWithoutMessagesInput
 }
 
-input UserUpsertWithWhereUniqueNestedInput {
+input UserUpdateWithoutConversationsDataInput {
+  firstname: String
+  lastname: String
+  username: String
+  email: String
+  password: String
+  messages: MessageUpdateManyWithoutUserInput
+}
+
+input UserUpdateWithoutMessagesDataInput {
+  firstname: String
+  lastname: String
+  username: String
+  email: String
+  password: String
+  conversations: ConversationUpdateManyWithoutUsersInput
+}
+
+input UserUpdateWithWhereUniqueWithoutConversationsInput {
   where: UserWhereUniqueInput!
-  update: UserUpdateDataInput!
-  create: UserCreateInput!
+  data: UserUpdateWithoutConversationsDataInput!
+}
+
+input UserUpsertWithoutMessagesInput {
+  update: UserUpdateWithoutMessagesDataInput!
+  create: UserCreateWithoutMessagesInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutConversationsInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutConversationsDataInput!
+  create: UserCreateWithoutConversationsInput!
 }
 
 input UserWhereInput {
@@ -1091,6 +1498,12 @@ input UserWhereInput {
 
   """All values not ending with the given string."""
   password_not_ends_with: String
+  conversations_every: ConversationWhereInput
+  conversations_some: ConversationWhereInput
+  conversations_none: ConversationWhereInput
+  messages_every: MessageWhereInput
+  messages_some: MessageWhereInput
+  messages_none: MessageWhereInput
 }
 
 input UserWhereUniqueInput {

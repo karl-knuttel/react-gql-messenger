@@ -5,17 +5,20 @@ type User {
     username: String! @unique
     email: String! @unique
     password: String!
-    # conversations: [Conversation!]!
+    conversations: [Conversation!]!
     # conversation: Conversation
+    messages: [Message!]!
 }
 
 type Message {
     id: ID! @unique
     text: String!
-    # user: User!
+    user: User!
+    conversation: ID!
 }
 
 type Conversation {
     id: ID! @unique
     users: [User!]!
+    messages: [Message!]!
 }
