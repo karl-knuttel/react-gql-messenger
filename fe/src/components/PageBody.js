@@ -14,7 +14,7 @@ const PageBodyStyles = styled.main`
     background-color: ${props => props.theme.superLightGrey};
 `;
 
-// const NotFound = () => <h1>Oops. That page doesn't exist!</h1>;
+const NotFound = () => <h1>Oops. That page doesn't exist!</h1>;
 
 const PageBody = () => (
     <PageBodyStyles>
@@ -33,6 +33,8 @@ const PageBody = () => (
                                     />
                                 )}
                             />
+                            <Route path="/conversations/:id" component={Chat} />
+                            <Route component={NotFound} />
                         </Switch>
                     )}
                     {!me && <Login />}

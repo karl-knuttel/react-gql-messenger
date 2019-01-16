@@ -16,6 +16,7 @@ type Mutation {
 type Query {
     users(where: UserWhereInput, orderBy: UserOrderByInput): [User]!
     messages(where: MessageWhereInput, orderBy: MessageOrderByInput): [Message]!
+    conversations(where: ConversationWhereInput): [Conversation]!
     me: User
     # users: [User]!
     # messages: [Message]!
