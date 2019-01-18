@@ -1,57 +1,141 @@
 import React, { Component } from 'react';
-import { Query, Mutation } from 'react-apollo';
+import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
+import { css } from 'glamor';
+import AddMessage from './AddMessage';
 
 // const CURRENT_CHAT_QUERY = gql`
 //     query CURRENT_CHAT_QUERY($id: ID!) {
-//         messages(where: { conversation: { id: $id } }, orderBy: createdAt_ASC) {
-//             id
-//             text
-//             user {
-//                 username
-//                 firstname
-//                 lastname
+//         conversations(where: { id: $id }) {
+//             messages(orderBy: createdAt_ASC) {
+//                 id
+//                 text
+//                 user {
+//                     username
+//                     firstname
+//                     lastname
+//                 }
 //             }
 //         }
 //     }
 // `;
 
-const CREATE_MESSAGE_MUTATION = gql`
-    mutation CREATE_MESSAGE_MUTATION($text: String!, $conversation: ID!) {
-        createMessage(text: $text, conversation: $conversation) {
+const CURRENT_CHAT_QUERY = gql`
+    query CURRENT_CHAT_QUERY($id: ID!) {
+        conversation(id: $id) {
             id
-            text
+            messages {
+                id
+                text
+                user {
+                    id
+                    username
+                }
+            }
         }
     }
 `;
 
+const NEW_MESSAGES_SUB = gql`
+    subscription($id: ID!) {
+        newMessage(conversationId: $id) {
+            node {
+                id
+                text
+                user {
+                    id
+                    username
+                }
+            }
+        }
+    }
+`;
+
+const chatBox = css({
+    height   : 'calc(100vh - 14rem)',
+    overflowY: 'auto'
+});
+
 class Conversation extends Component {
-    state = {
-        text        : '',
-        conversation: ''
+    scrollToBottom = () => {
+        setTimeout(() => {
+            this.chatBox.scrollTop = this.chatBox.scrollHeight;
+        }, 0);
     };
 
-    componentWillMount() {
-        console.log(this.props.match.params.id);
-        this.setState({
-            text        : 'It works dude!',
-            conversation: this.props.match.params.id
-        });
-    }
-
     render() {
+        const { id } = this.props.match.params;
         return (
-            <Mutation mutation={CREATE_MESSAGE_MUTATION} variables={this.state}>
-                {(createMessage, { loading, error }) => (
-                    <button
-                        onClick={async () => {
-                            await createMessage();
-                        }}
+            <div>
+                <div
+                    className = {chatBox}
+                    ref       = {el => {
+                        this.chatBox = el;
+                    }}
+                >
+                    <Query
+                        query       = {CURRENT_CHAT_QUERY}
+                        variables   = {{ id }}
+                        fetchPolicy = "network-only"
                     >
-                        New Message
-                    </button>
-                )}
-            </Mutation>
+                        {({
+                            data: { conversation },
+                            loading,
+                            error,
+                            subscribeToMore
+                        }) => {
+                            if (loading) return <p>Loading...</p>;
+                            if (error) return <p>Error!!</p>;
+                            subscribeToMore({
+                                document   : NEW_MESSAGES_SUB,
+                                variables  : { id },
+                                updateQuery: (prev, { subscriptionData }) => {
+                                    const newMessage = 
+                                        subscriptionData.data.newMessage.node;
+
+                                    if (
+                                        !prev.conversation.messages.find(
+                                            m => m.id === newMessage.id
+                                        )
+                                    ) {
+                                        console.log('Yep!');
+                                        return {
+                                            ...prev,
+                                            conversation: {
+                                                __typename: 
+                                                    prev.conversation
+                                                        .__typename,
+
+                                                id: prev.conversation.id,
+
+                                                messages: [
+                                                    ...prev.conversation
+                                                        .messages,
+                                                    newMessage
+                                                ]
+                                            }
+                                        };
+                                    }
+                                    return prev;
+                                }
+                            });
+
+                            const { messages } = conversation;
+                            // console.log(messages);
+                            return (
+                                <>
+                                    {messages.map(message => (
+                                        <p key={message.id}>{message.text}</p>
+                                    ))}
+                                    {this.scrollToBottom()}
+                                </>
+                                // null
+                            );
+                        }}
+                    </Query>
+                </div>
+                <AddMessage id={id} />
+            </div>
         );
     }
 }

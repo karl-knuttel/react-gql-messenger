@@ -25,6 +25,7 @@ const Mutation = {
     //     return message;
     // },
     async createMessage(parent, args, { db, request, pubsub }, info) {
+        console.log(args);
         const message = await db.mutation.createMessage(
             {
                 data: {
@@ -38,11 +39,16 @@ const Mutation = {
                             id: args.conversation
                         }
                     },
-                    ...args
+                    text: args.text
                 }
             },
             info
         );
+
+        pubsub.publish(PUBSUB_NEW_MESSAGE, {
+            newMessage: message
+            // conversation: message.conversation
+        });
 
         return message;
     },
