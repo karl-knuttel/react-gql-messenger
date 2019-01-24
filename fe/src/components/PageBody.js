@@ -3,7 +3,6 @@ import { Switch, Route } from 'react-router-dom';
 import styled from 'styled-components';
 import User from './User';
 // import TitleBar from './TitleBar';
-import Chat from './Chat';
 import Login from './Login';
 import Conversation from './Conversation';
 import NewConversation from './NewConversation';
@@ -24,7 +23,7 @@ const PageBody = () => (
                 <>
                     {me && (
                         <Switch>
-                            <Route exact path="/" component={Chat} />
+                            <Route exact path="/" component={NotFound} />
                             <Route
                                 path   = "/newconversation"
                                 render = {props => (

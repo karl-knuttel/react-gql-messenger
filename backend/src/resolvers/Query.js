@@ -1,30 +1,19 @@
 const { forwardTo } = require('prisma-binding');
 
 const Query = {
-    users   : forwardTo('db'),
-    messages: forwardTo('db'),
-    // conversation : forwardTo('db'),
-    // conversations: forwardTo('db'),
-    // conversations: () => {
-    //     return conversations;
-    // },
-    async conversations(parent, args, ctx, info) {
-        const conversations = await ctx.db.query.conversations();
-        return conversations;
-    },
+    users         : forwardTo('db'),
+    messages      : forwardTo('db'),
+    conversations : forwardTo('db'),
     async conversation(parent, args, ctx, info) {
         const conversation = await ctx.db.query.conversation(
             {
-                where: { id: args.id }
+                where : { id: args.id }
             },
             info
         );
 
         return conversation;
     },
-    // conversation: (root, { id }) => {
-    //     return conversations.find(conversation => conversation.id === id);
-    // },
     me(parent, args, ctx, info) {
         if (!ctx.request.userId) {
             // If a current user ID doesn't exist, return null

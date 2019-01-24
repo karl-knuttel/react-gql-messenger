@@ -3,27 +3,6 @@ const bcrypt = require('bcryptjs');
 const jwt    = require('jsonwebtoken');
 
 const Mutation = {
-    // async createMessage(parent, args, { db, pubsub }, info) {
-    //     // Check if logged in
-    //     if (!ctx.request.userId) {
-    //         throw new Error('You must be logged in to do that!');
-    //     }
-
-    //     const message = await db.mutation.createMessage(
-    //         {
-    //             data: {
-    //                 ...args
-    //             }
-    //         },
-    //         info
-    //     );
-
-    //     pubsub.publish(PUBSUB_NEW_MESSAGE, {
-    //         newMessage: message
-    //     });
-
-    //     return message;
-    // },
     async createMessage(parent, args, { db, request, pubsub }, info) {
         console.log(args);
         const message = await db.mutation.createMessage(
@@ -31,24 +10,24 @@ const Mutation = {
                 data: {
                     user: {
                         connect: {
-                            id: request.userId
+                            id : request.userId
                         }
                     },
                     conversation: {
                         connect: {
-                            id: args.conversation
+                            id : args.conversation
                         }
                     },
-                    text: args.text
+                    text : args.text
                 }
             },
             info
         );
 
-        pubsub.publish(PUBSUB_NEW_MESSAGE, {
-            newMessage: message
-            // conversation: message.conversation
-        });
+        // pubsub.publish(PUBSUB_NEW_MESSAGE, {
+        //     newMessage: message
+        //     // conversation: message.conversation
+        // });
 
         return message;
     },
@@ -57,9 +36,8 @@ const Mutation = {
             {
                 data: {
                     users: {
-                        connect: [...users.map(id => ({ id }))]
+                        connect : [...users.map(id => ({ id }))]
                     }
-                    // ...args
                 }
             },
             info
@@ -88,8 +66,8 @@ const Mutation = {
         const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
         // set the jwt as a cookie on the response
         ctx.response.cookie('token', token, {
-            httpOnly: true,
-            maxAge  : 1000 * 60 * 60 * 24 * 365  // 1 year cookie
+            httpOnly : true,
+            maxAge   : 1000 * 60 * 60 * 24 * 365  // 1 year cookie
         });
         // return user to the browser
         return user;
@@ -109,8 +87,8 @@ const Mutation = {
         const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
         //set the cookie with the token
         ctx.response.cookie('token', token, {
-            httpOnly: true,
-            maxAge  : 1000 * 60 * 60 * 24 * 365
+            httpOnly : true,
+            maxAge   : 1000 * 60 * 60 * 24 * 365
         });
         // return the user
         return user;

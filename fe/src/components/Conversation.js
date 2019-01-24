@@ -4,22 +4,6 @@ import gql from 'graphql-tag';
 import { css } from 'glamor';
 import AddMessage from './AddMessage';
 
-// const CURRENT_CHAT_QUERY = gql`
-//     query CURRENT_CHAT_QUERY($id: ID!) {
-//         conversations(where: { id: $id }) {
-//             messages(orderBy: createdAt_ASC) {
-//                 id
-//                 text
-//                 user {
-//                     username
-//                     firstname
-//                     lastname
-//                 }
-//             }
-//         }
-//     }
-// `;
-
 const CURRENT_CHAT_QUERY = gql`
     query CURRENT_CHAT_QUERY($id: ID!) {
         conversation(id: $id) {
@@ -98,7 +82,6 @@ class Conversation extends Component {
                                             m => m.id === newMessage.id
                                         )
                                     ) {
-                                        console.log('Yep!');
                                         return {
                                             ...prev,
                                             conversation: {
@@ -121,7 +104,6 @@ class Conversation extends Component {
                             });
 
                             const { messages } = conversation;
-                            // console.log(messages);
                             return (
                                 <>
                                     {messages.map(message => (
@@ -129,7 +111,6 @@ class Conversation extends Component {
                                     ))}
                                     {this.scrollToBottom()}
                                 </>
-                                // null
                             );
                         }}
                     </Query>

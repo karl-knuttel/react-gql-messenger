@@ -1,8 +1,9 @@
 {
-	"workbench.colorCustomizations": {
-		"titleBar.activeForeground"  : "#000",
-		"titleBar.inactiveForeground": "#000000CC",
-		"titleBar.activeBackground"  : "#03B5AA",
-		"titleBar.inactiveBackground": "#03B5AACC"
-	}
+    "workbench.colorCustomizations": {
+        "titleBar.activeForeground"  : "#000",
+        "titleBar.inactiveForeground": "#000000CC",
+        "titleBar.activeBackground"  : "#03B5AA",
+        "titleBar.inactiveBackground": "#03B5AACC"
+    },
+    "prettier.printWidth": 100
 }

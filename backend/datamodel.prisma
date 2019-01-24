@@ -19,5 +19,5 @@ type Message {
 type Conversation {
     id: ID! @unique
     users: [User!]!
-    messages: [Message!]!
+    messages: [Message]!
 }
