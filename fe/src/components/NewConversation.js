@@ -5,6 +5,7 @@ import debounce from 'lodash.debounce';
 import NewConversationUsersList from './NewConversationUsersList';
 import NewConversationSelectedUsers from './NewConversationSelectedUsers';
 import NewConversationSubmit from './NewConversationSubmit';
+import styled from 'styled-components';
 
 const SEARCH_USERS_QUERY = gql`
     query SEARCH_USERS_QUERY($searchTerm: String!) {
@@ -25,34 +26,54 @@ const SEARCH_USERS_QUERY = gql`
     }
 `;
 
+const CreateContainer = styled.div`
+    display : flex;
+`;
+
+const SearchInput = styled.input`
+    width         : 100%;
+    padding       : 1rem;
+    margin-top    : 2rem;
+    height        : auto;
+    border        : 1px solid ${props => props.theme.midLightGrey};
+    border-radius : 3px;
+    outline       : none;
+    font-size     : 1.4rem;
+    background    : ${props => props.theme.veryLightGrey};
+    box-shadow    : 0 0 0 0 rgba(0, 0, 0, 0);
+    transition    : all 0.125s ease-out;
+
+    &:focus {
+        transform  : translate3d(0, -1px, 0) scale(1.005);
+        box-shadow : 1px 1px 6px 1px rgba(0, 0, 0, 0.15);
+    }
+`;
+
 class NewConversation extends React.Component {
     state = {
-        loading      : false,
-        users        : [],
-        selectedUsers: []
+        loading       : false,
+        users         : [],
+        selectedUsers : []
     };
 
     onChange = debounce(async (e, client) => {
         this.setState({ loading: true });
 
         const res = await client.query({
-            query    : SEARCH_USERS_QUERY,
-            variables: { searchTerm: e.target.value }
+            query     : SEARCH_USERS_QUERY,
+            variables : { searchTerm: e.target.value }
         });
 
         this.setState({
-            users  : res.data.users,
-            loading: false
+            users   : res.data.users,
+            loading : false
         });
     }, 350);
 
     addUser = user => {
         const { id, firstname, lastname, username } = user;
         this.setState({
-            selectedUsers: [
-                ...this.state.selectedUsers,
-                { id, firstname, lastname, username }
-            ]
+            selectedUsers : [...this.state.selectedUsers, { id, firstname, lastname, username }]
         });
     };
 
@@ -68,31 +89,29 @@ class NewConversation extends React.Component {
     componentWillMount() {
         const { id, firstname, lastname, username } = this.props.currentUser;
         this.setState({
-            selectedUsers: [{ id, firstname, lastname, username }]
+            selectedUsers : [{ id, firstname, lastname, username }]
         });
     }
 
     render() {
         return (
             <div>
-                <div>
+                <CreateContainer>
                     <NewConversationSelectedUsers
                         selectedUsers = {this.state.selectedUsers}
                         currentUser   = {this.props.currentUser}
                         removeUser    = {this.removeUser}
                     />
-                    {/* {this.state.selectedUsers.length > 1 && ( */}
                     <NewConversationSubmit
                         users={this.state.selectedUsers.map(user => {
                             return user.id;
                         })}
                     />
-                    {/* )} */}
-                </div>
+                </CreateContainer>
 
                 <ApolloConsumer>
                     {client => (
-                        <input
+                        <SearchInput
                             type        = "search"
                             placeholder = "Search for users to add to chat"
                             onChange    = {e => {

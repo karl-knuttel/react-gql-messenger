@@ -2,7 +2,7 @@ import React from 'react';
 import { ApolloConsumer } from 'react-apollo';
 import gql from 'graphql-tag';
 import { withRouter } from 'react-router';
-// import { ALL_CONVERSATIONS_QUERY } from './ConversationLinks';
+import styled from 'styled-components';
 
 const CREATE_CONVERSATION_MUTATION = gql`
     mutation CREATE_CONVERSATION_MUTATION($users: [ID!]!) {
@@ -21,6 +21,30 @@ const MATCH_CONVERSATIONS_QUERY = gql`
             }
         }
     }
+`;
+
+const SubmitButton = styled.button`
+    background                 : ${props => props.theme.colorPrimary};
+    color                      : white;
+    text-transform             : uppercase;
+    outline                    : none;
+    border                     : none;
+    border-top-right-radius    : 3px;
+    border-bottom-right-radius : 3px;
+    padding                    : 1rem 2rem;
+    transition                 : background 0.1s ease-in;
+
+    &:hover {
+        background : ${props => props.theme.colorPrimaryDark};
+        cursor     : pointer;
+    }
+
+    /* &:disabled {
+        background : ${props => props.theme.colorPrimaryDisabled};
+        &:hover {
+            cursor : default;
+        }
+    } */
 `;
 
 const checkIfEqual = (a, b) => {
@@ -65,7 +89,6 @@ class CreateConversation extends React.Component {
             const newConversation = await client.mutate({
                 mutation  : CREATE_CONVERSATION_MUTATION,
                 variables : { users }
-                // refetchQueries : ALL_CONVERSATIONS_QUERY
             });
             const newId = newConversation.data.createConversation.id;
             this.props.history.push(`/conversations/${newId}`);
@@ -76,14 +99,14 @@ class CreateConversation extends React.Component {
         return (
             <ApolloConsumer>
                 {client => (
-                    <button
+                    <SubmitButton
                         disabled = {this.props.users.length < 2}
                         onClick  = {() => {
                             this.onButtonClick(this.props.users, client);
                         }}
                     >
-                        Create new conversation
-                    </button>
+                        Create
+                    </SubmitButton>
                 )}
             </ApolloConsumer>
         );
