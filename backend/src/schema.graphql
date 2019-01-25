@@ -24,6 +24,7 @@ type Query {
 
 type Subscription {
     newMessage(conversationId: ID!): MessageSubscriptionPayload
+    newConversation(userId: ID!): ConversationSubscriptionPayload
 }
 
 type User {

@@ -36,8 +36,8 @@ const NEW_MESSAGES_SUB = gql`
 `;
 
 const chatBox = css({
-    height   : 'calc(100vh - 14rem)',
-    overflowY: 'auto'
+    height    : 'calc(100vh - 14rem)',
+    overflowY : 'auto'
 });
 
 class Conversation extends Component {
@@ -57,25 +57,15 @@ class Conversation extends Component {
                         this.chatBox = el;
                     }}
                 >
-                    <Query
-                        query       = {CURRENT_CHAT_QUERY}
-                        variables   = {{ id }}
-                        fetchPolicy = "network-only"
-                    >
-                        {({
-                            data: { conversation },
-                            loading,
-                            error,
-                            subscribeToMore
-                        }) => {
+                    <Query query={CURRENT_CHAT_QUERY} variables={{ id }} fetchPolicy="network-only">
+                        {({ data: { conversation }, loading, error, subscribeToMore }) => {
                             if (loading) return <p>Loading...</p>;
                             if (error) return <p>Error!!</p>;
                             subscribeToMore({
-                                document   : NEW_MESSAGES_SUB,
-                                variables  : { id },
-                                updateQuery: (prev, { subscriptionData }) => {
-                                    const newMessage = 
-                                        subscriptionData.data.newMessage.node;
+                                document    : NEW_MESSAGES_SUB,
+                                variables   : { id },
+                                updateQuery : (prev, { subscriptionData }) => {
+                                    const newMessage = subscriptionData.data.newMessage.node;
 
                                     if (
                                         !prev.conversation.messages.find(
@@ -85,15 +75,12 @@ class Conversation extends Component {
                                         return {
                                             ...prev,
                                             conversation: {
-                                                __typename: 
-                                                    prev.conversation
-                                                        .__typename,
+                                                __typename : prev.conversation.__typename,
 
-                                                id: prev.conversation.id,
+                                                id : prev.conversation.id,
 
                                                 messages: [
-                                                    ...prev.conversation
-                                                        .messages,
+                                                    ...prev.conversation.messages,
                                                     newMessage
                                                 ]
                                             }

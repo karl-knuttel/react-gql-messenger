@@ -8,10 +8,10 @@ import Conversation from './Conversation';
 import NewConversation from './NewConversation';
 
 const PageBodyStyles = styled.main`
-    max-width       : ${props => props.theme.maxWidth};
-    padding         : 2rem;
-    position        : relative;
-    background-color: ${props => props.theme.superLightGrey};
+    max-width        : ${props => props.theme.maxWidth};
+    padding          : 2rem;
+    position         : relative;
+    background-color : ${props => props.theme.superLightGrey};
 `;
 
 const NotFound = () => <h1>Oops. That page doesn't exist!</h1>;
@@ -19,28 +19,21 @@ const NotFound = () => <h1>Oops. That page doesn't exist!</h1>;
 const PageBody = () => (
     <PageBodyStyles>
         <User>
-            {({ data: { me } }) => (
+            {({ data: { me }, loading }) => (
                 <>
+                    {loading && <p>Loading...</p>}
                     {me && (
                         <Switch>
                             <Route exact path="/" component={NotFound} />
                             <Route
                                 path   = "/newconversation"
-                                render = {props => (
-                                    <NewConversation
-                                        {...props}
-                                        currentUser = {me}
-                                    />
-                                )}
+                                render = {props => <NewConversation {...props} currentUser={me} />}
                             />
-                            <Route
-                                path      = "/conversations/:id"
-                                component = {Conversation}
-                            />
+                            <Route path="/conversations/:id" component={Conversation} />
                             <Route component={NotFound} />
                         </Switch>
                     )}
-                    {!me && <Login />}
+                    {!me && !loading && <Login />}
                 </>
             )}
         </User>

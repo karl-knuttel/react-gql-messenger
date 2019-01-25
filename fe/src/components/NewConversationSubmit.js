@@ -2,6 +2,7 @@ import React from 'react';
 import { ApolloConsumer } from 'react-apollo';
 import gql from 'graphql-tag';
 import { withRouter } from 'react-router';
+// import { ALL_CONVERSATIONS_QUERY } from './ConversationLinks';
 
 const CREATE_CONVERSATION_MUTATION = gql`
     mutation CREATE_CONVERSATION_MUTATION($users: [ID!]!) {
@@ -10,19 +11,6 @@ const CREATE_CONVERSATION_MUTATION = gql`
         }
     }
 `;
-
-// const MATCH_CONVERSATIONS_QUERY = gql`
-//     query MATCH_CONVERSATIONS_QUERY($users: [ID!]!) {
-//         conversations(
-//             where : { users_every: { id_in: $users }, users_none: { id_not_in: $users } }
-//         ) {
-//             id
-//             users {
-//                 id
-//             }
-//         }
-//     }
-// `;
 
 const MATCH_CONVERSATIONS_QUERY = gql`
     query MATCH_CONVERSATIONS_QUERY($users: [ID!]!) {
@@ -35,16 +23,16 @@ const MATCH_CONVERSATIONS_QUERY = gql`
     }
 `;
 
+const checkIfEqual = (a, b) => {
+    if (a.length !== b.length) return false;
+
+    for (let i = 0; i < a.length; i++) {
+        if (a[i] !== b[i]) return false;
+    }
+    return true;
+};
+
 class CreateConversation extends React.Component {
-    checkIfEqual = (a, b) => {
-        if (a.length !== b.length) return false;
-
-        for (let i = 0; i < a.length; i++) {
-            if (a[i] !== b[i]) return false;
-        }
-        return true;
-    };
-
     onButtonClick = async (users, client) => {
         const res = await client.query({
             query     : MATCH_CONVERSATIONS_QUERY,
@@ -63,7 +51,7 @@ class CreateConversation extends React.Component {
 
             let sortedUsersMatch = usersMatch.sort();
 
-            if (this.checkIfEqual(sortedUsers, sortedUsersMatch)) {
+            if (checkIfEqual(sortedUsers, sortedUsersMatch)) {
                 id = conversation.id;
                 return id;
             }
@@ -77,18 +65,12 @@ class CreateConversation extends React.Component {
             const newConversation = await client.mutate({
                 mutation  : CREATE_CONVERSATION_MUTATION,
                 variables : { users }
+                // refetchQueries : ALL_CONVERSATIONS_QUERY
             });
             const newId = newConversation.data.createConversation.id;
             this.props.history.push(`/conversations/${newId}`);
         }
     };
-
-    // onConversationSubmit = async (users, client) => {
-    //     await client.mutate({
-    //         mutation  : CREATE_CONVERSATION_MUTATION,
-    //         variables : { users }
-    //     });
-    // };
 
     render() {
         return (

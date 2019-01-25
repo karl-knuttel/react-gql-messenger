@@ -4,13 +4,13 @@ import { withRouter } from 'react-router';
 import HeaderStyles, { Logo } from './styles/Header';
 import ConversationLinks from './ConversationLinks';
 
-const Header = () => (
+const Header = props => (
     <HeaderStyles>
         <Logo>
             <Link to="/">Messenger</Link>
         </Logo>
 
-        <ConversationLinks />
+        <ConversationLinks {...props} />
     </HeaderStyles>
 );
 

@@ -21,6 +21,27 @@ const Subscription = {
             );
             // return null;
         }
+    },
+    newConversation: {
+        subscribe: async (parent, args, ctx, info) => {
+            return await ctx.db.subscription.conversation(
+                {
+                    where: {
+                        AND: [
+                            { mutation_in: ['CREATED'] },
+                            {
+                                node: {
+                                    users_some: {
+                                        id : args.userId
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                },
+                info
+            );
+        }
     }
 };
 
