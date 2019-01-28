@@ -120,8 +120,6 @@ const ConversationLinks = props => (
             const userId = data.me.id;
             const path   = props.location.pathname.split('/')[2];
 
-            console.log(path);
-
             return (
                 <Query
                     query       = {ALL_CONVERSATIONS_QUERY}

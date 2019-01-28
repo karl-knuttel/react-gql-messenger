@@ -39,12 +39,12 @@ const SubmitButton = styled.button`
         cursor     : pointer;
     }
 
-    /* &:disabled {
-        background : ${props => props.theme.colorPrimaryDisabled};
+    &:disabled {
+        background : ${props => props.theme.lightGrey};
         &:hover {
             cursor : default;
         }
-    } */
+    }
 `;
 
 const checkIfEqual = (a, b) => {

@@ -31,7 +31,7 @@ const CreateContainer = styled.div`
 `;
 
 const SearchInput = styled.input`
-    width         : 100%;
+    width         : calc(100% - 8rem);
     padding       : 1rem;
     margin-top    : 2rem;
     height        : auto;
@@ -44,8 +44,10 @@ const SearchInput = styled.input`
     transition    : all 0.125s ease-out;
 
     &:focus {
-        transform  : translate3d(0, -1px, 0) scale(1.005);
-        box-shadow : 1px 1px 6px 1px rgba(0, 0, 0, 0.15);
+        border     : 1px solid ${props => props.theme.colorPrimary};
+        transform  : translate3d(0, -2px, 0) scale(1.005);
+        box-shadow : 2px 2px 3px 1px rgba(0, 0, 0, 0.05);
+        background : ${props => props.theme.white};
     }
 `;
 

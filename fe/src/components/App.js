@@ -4,18 +4,20 @@ import Header from './Header';
 import PageBody from './PageBody';
 
 const theme = {
-    black                : '#002A32',
-    dark                 : '#403F4C',
-    colorPrimary         : '#03B5AA',
-    colorPrimaryDark     : '#01a399',
-    colorPrimaryDisabled : '#bfcccb',
-    darkGrey             : '#585858',
-    midGrey              : '#919191',
-    midLightGrey         : '#b2b2b2',
-    lightGrey            : '#e3e3e3',
-    veryLightGrey        : '#fafafa',
-    superLightGrey       : '#FDFDFF',
-    maxWidth             : '1000px'
+    black                   : '#002A32',
+    white                   : '#ffffff',
+    dark                    : '#403F4C',
+    colorPrimary            : '#03B5AA',
+    colorPrimaryTransparent : 'rgb(3, 181, 170, 0.1)',
+    colorPrimaryDark        : '#01a399',
+    colorPrimaryDisabled    : '#bfcccb',
+    darkGrey                : '#585858',
+    midGrey                 : '#919191',
+    midLightGrey            : '#c7c7c7',
+    lightGrey               : '#e3e3e3',
+    veryLightGrey           : '#fafafa',
+    superLightGrey          : '#FDFDFF',
+    maxWidth                : '1000px'
 };
 
 const StyledPage = styled.div`

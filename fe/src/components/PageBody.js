@@ -10,6 +10,7 @@ import NewConversation from './NewConversation';
 const PageBodyStyles = styled.main`
     max-width        : ${props => props.theme.maxWidth};
     padding          : 2rem;
+    padding-bottom   : 0;
     position         : relative;
     background-color : ${props => props.theme.superLightGrey};
 `;
