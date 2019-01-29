@@ -37,6 +37,7 @@ type User {
     username: String!
     conversations: [Conversation!]!
     messages: [Message!]!
+    lastActivity: DateTime!
 }
 
 # type Conversation {

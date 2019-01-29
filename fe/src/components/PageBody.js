@@ -25,24 +25,24 @@ const NotFound = () => <h1>Oops. That page doesn't exist!</h1>;
 const UPDATE_USER_ACTIVITY_MUTATION = gql`
     mutation UPDATE_USER_ACTIVITY_MUTATION($id: ID!, $now: DateTime!) {
         updateUserActivity(id: $id, lastActivity: $now) {
+            id
             lastActivity
         }
     }
 `;
 
-const UpdateUserActivity = props => (
-    <Mutation mutation={UPDATE_USER_ACTIVITY_MUTATION} variables={props.id}>
-        {(updateUserActivity, { data, loading, error }) => (
-            <ContainerComponent updateUserActivity />
-        )}
-    </Mutation>
-);
-
 class ContainerComponent extends React.Component {
     componentDidMount() {
-        // setInterval(this.props.updateUserActivity(), 1000 * 60 * 60 * 3);
-        console.log(this.props);
-        // this.props.updateUserActivity();
+        this.props.updateUserActivity();
+        const that = this;
+        setInterval(function() {
+            // console.log(that.props);
+            that.props.updateUserActivity();
+        }, 30000);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
     }
 
     render() {
@@ -50,40 +50,71 @@ class ContainerComponent extends React.Component {
     }
 }
 
-const PageBody = () => (
-    <PageBodyStyles>
-        <User>
-            {({ data: { me }, loading }) => (
-                <>
-                    {loading && <p>Loading...</p>}
-                    {me && (
-                        <Mutation mutation={UPDATE_USER_ACTIVITY_MUTATION} variables={{ me }}>
-                            {(updateUserActivity, { data, loading, error }) => (
-                                <ContainerComponent
-                                    id  = {me.id}
-                                    now = {new Date().toISOString()}
-                                    updateUserActivity
+// const PageBody = () => (
+
+class PageBody extends React.Component {
+    state = {
+        now : new Date().toISOString()
+    };
+
+    tick() {
+        this.setState({
+            now : new Date().toISOString()
+        });
+        // console.log(this.state.now);
+    }
+
+    componentWillMount() {
+        this.setNewDate = setInterval(() => this.tick(), 30000);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.setNewdate);
+    }
+
+    render() {
+        return (
+            <PageBodyStyles>
+                <User>
+                    {({ data: { me }, loading }) => (
+                        <>
+                            {loading && <p>Loading...</p>}
+                            {me && (
+                                <Mutation
+                                    mutation  = {UPDATE_USER_ACTIVITY_MUTATION}
+                                    variables = {{ id: me.id, now: this.state.now }}
                                 >
-                                    <Switch>
-                                        <Route exact path="/" component={NotFound} />
-                                        <Route
-                                            path   = "/newconversation"
-                                            render = {props => (
-                                                <NewConversation {...props} currentUser={me} />
-                                            )}
-                                        />
-                                        <Route path="/conversations/:id" component={Conversation} />
-                                        <Route component={NotFound} />
-                                    </Switch>
-                                </ContainerComponent>
+                                    {(updateUserActivity, { data, loading, error }) => (
+                                        <ContainerComponent updateUserActivity={updateUserActivity}>
+                                            <Switch>
+                                                <Route exact path="/" component={NotFound} />
+                                                <Route
+                                                    path   = "/newconversation"
+                                                    render = {props => (
+                                                        <NewConversation
+                                                            {...props}
+                                                            currentUser = {me}
+                                                        />
+                                                    )}
+                                                />
+                                                <Route
+                                                    path      = "/conversations/:id"
+                                                    component = {Conversation}
+                                                />
+                                                <Route component={NotFound} />
+                                            </Switch>
+                                        </ContainerComponent>
+                                    )}
+                                </Mutation>
                             )}
-                        </Mutation>
+                            {!me && !loading && <Login />}
+                        </>
                     )}
-                    {!me && !loading && <Login />}
-                </>
-            )}
-        </User>
-    </PageBodyStyles>
-);
+                </User>
+            </PageBodyStyles>
+        );
+    }
+}
+// );
 
 export default PageBody;

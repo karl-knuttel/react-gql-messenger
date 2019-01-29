@@ -88,13 +88,13 @@ const Mutation = {
         // return the user
         return user;
     },
-    async updateUserActivity(parent, { id, now }, ctx, info) {
+    async updateUserActivity(parent, { id, lastActivity }, ctx, info) {
         const updatedUser = await ctx.db.mutation.updateUser({
             where: {
-                id : id
+                id
             },
             data: {
-                lastActivity : now
+                lastActivity
             },
             info
         });
