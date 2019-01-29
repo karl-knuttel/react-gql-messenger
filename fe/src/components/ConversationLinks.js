@@ -2,8 +2,8 @@ import React from 'react';
 import { Query } from 'react-apollo';
 import { Link } from 'react-router-dom';
 import gql from 'graphql-tag';
-import { css } from 'glamor';
-import User, { CURRENT_USER_QUERY } from './User';
+// import { css } from 'glamor';
+import { CURRENT_USER_QUERY } from './User';
 import styled from 'styled-components';
 
 const ALL_CONVERSATIONS_QUERY = gql`
@@ -180,7 +180,7 @@ const ConversationLinks = props => (
                                 </ConversationsList>
                             </div>
                         );
-                        return null;
+                        // return null;
                     }}
                 </Query>
             );

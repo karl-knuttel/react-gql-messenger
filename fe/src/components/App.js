@@ -8,16 +8,20 @@ const theme = {
     white                   : '#ffffff',
     dark                    : '#403F4C',
     colorPrimary            : '#03B5AA',
-    colorPrimaryTransparent : 'rgb(3, 181, 170, 0.1)',
+    colorPrimaryTransparent : 'rgb(3, 181, 170, 0.05)',
     colorPrimaryDark        : '#01a399',
     colorPrimaryDisabled    : '#bfcccb',
-    darkGrey                : '#585858',
-    midGrey                 : '#919191',
-    midLightGrey            : '#c7c7c7',
-    lightGrey               : '#e3e3e3',
-    veryLightGrey           : '#fafafa',
-    superLightGrey          : '#FDFDFF',
-    maxWidth                : '1000px'
+    // colorSecondary            : '#b50367',
+    // colorSecondaryTransparent : 'rgb(181, 3, 103, 0.05)',
+    colorSecondary            : '#fd87e6',
+    colorSecondaryTransparent : 'rgb(253, 135, 230, 0.15)',
+    darkGrey                  : '#585858',
+    midGrey                   : '#919191',
+    midLightGrey              : '#c7c7c7',
+    lightGrey                 : '#e3e3e3',
+    veryLightGrey             : '#fafafa',
+    superLightGrey            : '#FDFDFF',
+    maxWidth                  : '1000px'
 };
 
 const StyledPage = styled.div`

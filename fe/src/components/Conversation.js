@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import { css } from 'glamor';
+import styled from 'styled-components';
 import AddMessage from './AddMessage';
 
 const CURRENT_CHAT_QUERY = gql`
@@ -14,6 +15,8 @@ const CURRENT_CHAT_QUERY = gql`
                 user {
                     id
                     username
+                    firstname
+                    lastname
                 }
             }
         }
@@ -29,6 +32,8 @@ const NEW_MESSAGES_SUB = gql`
                 user {
                     id
                     username
+                    firstname
+                    lastname
                 }
             }
         }
@@ -39,6 +44,30 @@ const chatBox = css({
     height    : 'calc(100vh - 14rem)',
     overflowY : 'auto'
 });
+
+const MessagesList = styled.ul`
+    list-style   : none;
+    padding-left : 0;
+    max-width    : 60%;
+    z-index      : 2;
+    color        : white;
+
+    li {
+        padding       : 1.5rem 2rem;
+        margin-bottom : 1rem;
+        background    : ${props => props.theme.colorSecondaryTransparent};
+        border        : 1px solid ${props => props.theme.colorSecondary};
+        border-radius : 9px;
+
+        h5 {
+            letter-spacing : 0.5px;
+        }
+
+        p {
+            letter-spacing : 0.65px;
+        }
+    }
+`;
 
 class Conversation extends Component {
     scrollToBottom = () => {
@@ -92,12 +121,17 @@ class Conversation extends Component {
 
                             const { messages } = conversation;
                             return (
-                                <>
+                                <MessagesList>
                                     {messages.map(message => (
-                                        <p key={message.id}>{message.text}</p>
+                                        <li key={message.id}>
+                                            <h5>
+                                                {message.user.firstname} {message.user.lastname}
+                                            </h5>
+                                            <p>{message.text}</p>
+                                        </li>
                                     ))}
                                     {this.scrollToBottom()}
-                                </>
+                                </MessagesList>
                             );
                         }}
                     </Query>
