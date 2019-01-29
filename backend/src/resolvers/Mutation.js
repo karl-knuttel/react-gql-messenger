@@ -24,11 +24,6 @@ const Mutation = {
             info
         );
 
-        // pubsub.publish(PUBSUB_NEW_MESSAGE, {
-        //     newMessage: message
-        //     // conversation: message.conversation
-        // });
-
         return message;
     },
     async createConversation(parent, { users }, ctx, info) {
@@ -92,6 +87,21 @@ const Mutation = {
         });
         // return the user
         return user;
+    },
+    async updateUserActivity(parent, { id, now }, ctx, info) {
+        const updatedUser = await ctx.db.mutation.updateUser({
+            where: {
+                id : id
+            },
+            data: {
+                lastActivity : now
+            },
+            info
+        });
+
+        console.log(updatedUser);
+
+        return updatedUser;
     }
 };
 

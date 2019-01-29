@@ -1,5 +1,5 @@
 # source: https://eu1.prisma.sh/karlknuttel-0a50b9/gql-messenger-be/dev
-# timestamp: Thu Jan 17 2019 11:00:13 GMT+0100 (CET)
+# timestamp: Mon Jan 28 2019 15:35:51 GMT+0100 (CET)
 
 type AggregateConversation {
   count: Int!
@@ -276,6 +276,8 @@ input ConversationWhereInput {
 input ConversationWhereUniqueInput {
   id: ID
 }
+
+scalar DateTime
 
 """
 The `Long` scalar type represents non-fractional signed whole numeric values.
@@ -733,6 +735,7 @@ type User implements Node {
   password: String!
   conversations(where: ConversationWhereInput, orderBy: ConversationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Conversation!]
   messages(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Message!]
+  lastActivity: DateTime!
 }
 
 """A connection to a list of items."""
@@ -751,6 +754,7 @@ input UserCreateInput {
   username: String!
   email: String!
   password: String!
+  lastActivity: DateTime!
   conversations: ConversationCreateManyWithoutUsersInput
   messages: MessageCreateManyWithoutUserInput
 }
@@ -771,6 +775,7 @@ input UserCreateWithoutConversationsInput {
   username: String!
   email: String!
   password: String!
+  lastActivity: DateTime!
   messages: MessageCreateManyWithoutUserInput
 }
 
@@ -780,6 +785,7 @@ input UserCreateWithoutMessagesInput {
   username: String!
   email: String!
   password: String!
+  lastActivity: DateTime!
   conversations: ConversationCreateManyWithoutUsersInput
 }
 
@@ -805,6 +811,8 @@ enum UserOrderByInput {
   email_DESC
   password_ASC
   password_DESC
+  lastActivity_ASC
+  lastActivity_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -818,6 +826,7 @@ type UserPreviousValues {
   username: String!
   email: String!
   password: String!
+  lastActivity: DateTime!
 }
 
 input UserScalarWhereInput {
@@ -1069,6 +1078,28 @@ input UserScalarWhereInput {
 
   """All values not ending with the given string."""
   password_not_ends_with: String
+  lastActivity: DateTime
+
+  """All values that are not equal to given value."""
+  lastActivity_not: DateTime
+
+  """All values that are contained in given list."""
+  lastActivity_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  lastActivity_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  lastActivity_lt: DateTime
+
+  """All values less than or equal the given value."""
+  lastActivity_lte: DateTime
+
+  """All values greater than the given value."""
+  lastActivity_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  lastActivity_gte: DateTime
 }
 
 type UserSubscriptionPayload {
@@ -1116,6 +1147,7 @@ input UserUpdateInput {
   username: String
   email: String
   password: String
+  lastActivity: DateTime
   conversations: ConversationUpdateManyWithoutUsersInput
   messages: MessageUpdateManyWithoutUserInput
 }
@@ -1126,6 +1158,7 @@ input UserUpdateManyDataInput {
   username: String
   email: String
   password: String
+  lastActivity: DateTime
 }
 
 input UserUpdateManyMutationInput {
@@ -1134,6 +1167,7 @@ input UserUpdateManyMutationInput {
   username: String
   email: String
   password: String
+  lastActivity: DateTime
 }
 
 input UserUpdateManyWithoutConversationsInput {
@@ -1166,6 +1200,7 @@ input UserUpdateWithoutConversationsDataInput {
   username: String
   email: String
   password: String
+  lastActivity: DateTime
   messages: MessageUpdateManyWithoutUserInput
 }
 
@@ -1175,6 +1210,7 @@ input UserUpdateWithoutMessagesDataInput {
   username: String
   email: String
   password: String
+  lastActivity: DateTime
   conversations: ConversationUpdateManyWithoutUsersInput
 }
 
@@ -1443,6 +1479,28 @@ input UserWhereInput {
 
   """All values not ending with the given string."""
   password_not_ends_with: String
+  lastActivity: DateTime
+
+  """All values that are not equal to given value."""
+  lastActivity_not: DateTime
+
+  """All values that are contained in given list."""
+  lastActivity_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  lastActivity_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  lastActivity_lt: DateTime
+
+  """All values less than or equal the given value."""
+  lastActivity_lte: DateTime
+
+  """All values greater than the given value."""
+  lastActivity_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  lastActivity_gte: DateTime
   conversations_every: ConversationWhereInput
   conversations_some: ConversationWhereInput
   conversations_none: ConversationWhereInput

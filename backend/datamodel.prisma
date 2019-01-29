@@ -7,6 +7,7 @@ type User {
     password: String!
     conversations: [Conversation!]!
     messages: [Message!]!
+    lastActivity: DateTime!
 }
 
 type Message {

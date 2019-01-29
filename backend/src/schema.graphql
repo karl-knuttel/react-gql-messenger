@@ -9,8 +9,10 @@ type Mutation {
         firstname: String!
         lastname: String!
         username: String!
+        lastActivity: DateTime!
     ): User!
     signin(email: String!, password: String!): User!
+    updateUserActivity(id: ID!, lastActivity: DateTime): User!
 }
 
 type Query {

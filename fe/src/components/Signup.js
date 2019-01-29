@@ -8,18 +8,20 @@ import { CURRENT_USER_QUERY } from './User';
 
 const SIGNUP_MUTATION = gql`
     mutation SIGNUP_MUTATION(
-        $email    : String!
-        $firstname: String!
-        $lastname : String!
-        $password : String!
-        $username : String!
+        $email        : String!
+        $firstname    : String!
+        $lastname     : String!
+        $password     : String!
+        $username     : String!
+        $lastActivity : DateTime!
     ) {
         signup(
-            email    : $email
-            firstname: $firstname
-            lastname : $lastname
-            password : $password
-            username : $username
+            email        : $email
+            firstname    : $firstname
+            lastname     : $lastname
+            password     : $password
+            username     : $username
+            lastActivity : $lastActivity
         ) {
             id
             email
@@ -31,15 +33,18 @@ const SIGNUP_MUTATION = gql`
 
 class Signup extends Component {
     state = {
-        email    : '',
-        firstname: '',
-        lastname : '',
-        password : '',
-        username : ''
+        email        : '',
+        firstname    : '',
+        lastname     : '',
+        password     : '',
+        username     : '',
+        lastActivity : ''
     };
 
     saveToState = e => {
         this.setState({ [e.target.name]: e.target.value });
+        let now = new Date().toISOString();
+        this.setState({ lastActivity: now });
     };
 
     render() {
@@ -58,11 +63,11 @@ class Signup extends Component {
                                 e.preventDefault();
                                 await signup();
                                 this.setState({
-                                    email    : '',
-                                    firstname: '',
-                                    lastname : '',
-                                    password : '',
-                                    username : ''
+                                    email     : '',
+                                    firstname : '',
+                                    lastname  : '',
+                                    password  : '',
+                                    username  : ''
                                 });
                             }}
                         >
