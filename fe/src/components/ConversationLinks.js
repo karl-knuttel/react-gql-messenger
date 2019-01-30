@@ -5,6 +5,7 @@ import gql from 'graphql-tag';
 // import { css } from 'glamor';
 import { CURRENT_USER_QUERY } from './User';
 import styled from 'styled-components';
+import ConversationLinksOnlineStatus from './ConversationLinksOnlineStatus';
 
 const ALL_CONVERSATIONS_QUERY = gql`
     query ALL_CONVERSATIONS_QUERY($userId: ID!) {
@@ -163,6 +164,10 @@ const ConversationLinks = props => (
                                             key       = {conversation.id}
                                             className = {conversation.id === path ? 'isActive' : ''}
                                         >
+                                            <ConversationLinksOnlineStatus
+                                                users         = {conversation.users}
+                                                currentUserId = {userId}
+                                            />
                                             <Link to={`/conversations/${conversation.id}`}>
                                                 {conversation.users.map(user => {
                                                     if (user.id !== userId) {

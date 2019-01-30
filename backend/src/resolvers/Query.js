@@ -21,7 +21,8 @@ const Query = {
         }
         // Otherwise return the user whose ID matches the current user ID
         return ctx.db.query.user({ where: { id: ctx.request.userId } }, info);
-    }
+    },
+    checkUsers : forwardTo('db')
 };
 
 module.exports = Query;

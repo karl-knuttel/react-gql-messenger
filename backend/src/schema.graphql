@@ -22,6 +22,7 @@ type Query {
     conversation(id: ID!): Conversation
     me: User
     allUsersMeta: UserConnection!
+    checkUsers(where: UserWhereInput): [User]!
 }
 
 type Subscription {

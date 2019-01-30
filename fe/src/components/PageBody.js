@@ -17,7 +17,6 @@ const PageBodyStyles = styled.main`
     background     : linear-gradient(0deg, rgba(76, 75, 90, 0.95), rgba(76, 75, 90, 0.95)),
         url('../img/80s-pattern-2.jpg') repeat left top;
     background-size : 35%;
-    /* box-shadow      : 1px 0 1px 0 rgba(0, 0, 0, 0.15) inset; */
 `;
 
 const NotFound = () => <h1>Oops. That page doesn't exist!</h1>;
@@ -31,7 +30,7 @@ const UPDATE_USER_ACTIVITY_MUTATION = gql`
     }
 `;
 
-class ContainerComponent extends React.Component {
+class UserOnlineStatus extends React.Component {
     componentDidMount() {
         this.props.updateUserActivity();
         const that = this;
@@ -50,8 +49,6 @@ class ContainerComponent extends React.Component {
     }
 }
 
-// const PageBody = () => (
-
 class PageBody extends React.Component {
     state = {
         now : new Date().toISOString()
@@ -69,7 +66,7 @@ class PageBody extends React.Component {
     }
 
     componentWillUnmount() {
-        clearInterval(this.setNewdate);
+        clearInterval(this.setNewDate);
     }
 
     render() {
@@ -85,7 +82,7 @@ class PageBody extends React.Component {
                                     variables = {{ id: me.id, now: this.state.now }}
                                 >
                                     {(updateUserActivity, { data, loading, error }) => (
-                                        <ContainerComponent updateUserActivity={updateUserActivity}>
+                                        <UserOnlineStatus updateUserActivity={updateUserActivity}>
                                             <Switch>
                                                 <Route exact path="/" component={NotFound} />
                                                 <Route
@@ -103,7 +100,7 @@ class PageBody extends React.Component {
                                                 />
                                                 <Route component={NotFound} />
                                             </Switch>
-                                        </ContainerComponent>
+                                        </UserOnlineStatus>
                                     )}
                                 </Mutation>
                             )}
