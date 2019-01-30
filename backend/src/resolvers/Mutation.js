@@ -99,7 +99,7 @@ const Mutation = {
             info
         });
 
-        console.log(updatedUser);
+        // console.log(updatedUser);
 
         return updatedUser;
     }

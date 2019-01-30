@@ -95,8 +95,11 @@ class PageBody extends React.Component {
                                                     )}
                                                 />
                                                 <Route
-                                                    path      = "/conversations/:id"
-                                                    component = {Conversation}
+                                                    path = "/conversations/:id"
+                                                    // component = {Conversation}
+                                                    render={props => (
+                                                        <Conversation {...props} currentUser={me} />
+                                                    )}
                                                 />
                                                 <Route component={NotFound} />
                                             </Switch>

@@ -14,18 +14,28 @@ const ADD_MESSAGE_MUTATION = gql`
 
 class AddMessage extends Component {
     state = {
-        text        : '',
-        conversation: ''
+        text         : '',
+        conversation : ''
     };
 
     componentWillMount() {
-        // console.log(this.id);
+        // console.log(this.props.id);
         this.setState({
-            conversation: this.props.id
+            conversation : this.props.match.params.id
         });
     }
 
+    componentDidUpdate(prev) {
+        // console.log('prev: ', prev.id);
+        // this.setState({
+        //     conversation : prev.id
+        // });
+        // this.conversationId = prev.id;
+    }
+
     render() {
+        // console.log(this.props);
+        console.log(this.state.conversation);
         return (
             <Mutation mutation={ADD_MESSAGE_MUTATION} variables={this.state}>
                 {(createMessage, { loading, error }) => (
@@ -51,9 +61,7 @@ class AddMessage extends Component {
                             autoComplete = "off"
                             placeholder  = "Start typing something"
                             value        = {this.state.text}
-                            onChange     = {e =>
-                                this.setState({ text: e.target.value })
-                            }
+                            onChange     = {e => this.setState({ text: e.target.value })}
                         />
                     </ChatInputBox>
                 )}

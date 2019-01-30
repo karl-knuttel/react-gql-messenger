@@ -13,6 +13,8 @@ const theme = {
     colorPrimaryDisabled      : '#bfcccb',
     colorSecondary            : '#fd87e6',
     colorSecondaryTransparent : 'rgb(253, 135, 230, 0.15)',
+    colorTertiary             : '#B2B2B2',
+    colorTertiaryTransparent  : 'rgb(178,178,178, 0.15)',
     colorOnline               : '#71E591',
     darkGrey                  : '#585858',
     midGrey                   : '#919191',
@@ -37,6 +39,16 @@ const GlobalStyle = createGlobalStyle`
     }
     *, *::before, *::after {
         box-sizing : inherit;
+    }
+    ::-webkit-scrollbar { 
+        width      : 9px;
+        background : transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+        background : rgb(3, 181, 170, 0.5);
+    }
+    ::-webkit-scrollbar-thumb:hover{
+        background : ${props => props.theme.colorPrimary};
     }
     body {
         padding        : 0;
