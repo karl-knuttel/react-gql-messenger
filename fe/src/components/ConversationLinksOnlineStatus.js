@@ -1,13 +1,32 @@
 import React, { Component } from 'react';
 import gql from 'graphql-tag';
-// import { Query } from 'react-apollo';
 import { ApolloConsumer } from 'react-apollo';
+import styled from 'styled-components';
 
 const USERS_ONLINE_QUERY = gql`
     query USERS_ONLINE_QUERY($userIds: [ID!]!) {
         users(where: { id_in: $userIds }) {
             id
             lastActivity
+        }
+    }
+`;
+
+const OnlineNotification = styled.div`
+    margin-right : 1rem;
+
+    .notification {
+        height        : 11px;
+        width         : 11px;
+        border-radius : 50%;
+
+        &.offline {
+            background-color : grey;
+        }
+
+        &.online {
+            /* background-color : green; */
+            background-color : ${props => props.theme.colorOnline};
         }
     }
 `;
@@ -39,55 +58,52 @@ class CheckUsers extends Component {
 
         const users = res.data.users;
         // console.log(users);
+        const usersOnlineNow = [];
 
         users.forEach(user => {
             if (user.id !== this.props.currentUserId) {
                 const lastOnline = this.checkLastUserActivity(user.lastActivity);
-                console.log('User ', user.id, 'was last online', lastOnline, 'seconds ago');
+                // console.log('User ', user.id, 'was last online', lastOnline / 1000, 'seconds ago');
 
-                if (lastOnline < 60000) {
-                    this.setState({
-                        online : true
-                    });
-                    console.log('Online!');
+                if (lastOnline < 30000) {
+                    usersOnlineNow.push(user.id);
                 } else {
-                    this.setState({
-                        online : false
-                    });
-                    console.log('Offline!!');
+                    let index = usersOnlineNow.indexOf(user.id);
+                    if (index !== -1) {
+                        usersOnlineNow.splice(index, 1);
+                    }
                 }
             }
         });
+
+        if (usersOnlineNow.length > 0) {
+            this.setState({
+                online : true
+            });
+        } else {
+            this.setState({
+                online : false
+            });
+        }
     }
 
     componentDidMount() {
         this.checkUsersStatus();
-        // const that = this;
-        // setInterval(function() {
-        //     that.checkUsersStatus();
-        // }, 3000);
-    }
-
-    componentDidUpdate(nextProps) {
-        // console.log(nextProps);
+        const that = this;
+        setInterval(function() {
+            that.checkUsersStatus();
+        }, 30000);
     }
 
     render() {
         return (
-            this.state.users && (
-                <div>
-                    {this.state.users.map(user => {
-                        if (user.id === this.props.currentUserId) {
-                            return (
-                                <p key={user.id}>
-                                    {user.id} {user.lastActivity}
-                                </p>
-                            );
-                        }
-                        return null;
-                    })}
-                </div>
-            )
+            <OnlineNotification>
+                {this.state.online ? (
+                    <div className="notification online" />
+                ) : (
+                    <div className="notification offline" />
+                )}
+            </OnlineNotification>
         );
     }
 }

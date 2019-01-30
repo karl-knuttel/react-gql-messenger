@@ -90,6 +90,8 @@ const ConversationsList = styled.ul`
         width        : calc(100% + 4rem);
         margin-left  : -2rem;
         padding-left : 2rem;
+        display      : flex;
+        align-items  : center;
 
         &.isActive {
             background : ${props => props.theme.colorPrimary};
