@@ -1,13 +1,30 @@
 import React, { Component } from 'react';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
-import { ChatInputBox } from './styles/ChatInput';
+import styled from 'styled-components';
 
 const ADD_MESSAGE_MUTATION = gql`
     mutation ADD_MESSAGE_MUTATION($text: String!, $conversation: ID!) {
         createMessage(text: $text, conversation: $conversation) {
             id
             text
+        }
+    }
+`;
+
+const MessageInput = styled.div`
+    height  : 5.5rem;
+    padding : 0.5rem 1rem 0;
+    input {
+        font-size     : 1.2rem;
+        width         : 100%;
+        height        : 4rem;
+        padding       : 1rem;
+        border        : 2px solid grey;
+        border-radius : 7px;
+        &:focus {
+            outline      : 0;
+            border-color : ${props => props.theme.colorPrimary};
         }
     }
 `;
@@ -19,34 +36,16 @@ class AddMessage extends Component {
     };
 
     componentWillMount() {
-        // console.log(this.props.id);
         this.setState({
             conversation : this.props.match.params.id
         });
     }
 
-    componentDidUpdate(prev) {
-        // console.log('prev: ', prev.id);
-        // this.setState({
-        //     conversation : prev.id
-        // });
-        // this.conversationId = prev.id;
-    }
-
     render() {
-        // console.log(this.props);
-        console.log(this.state.conversation);
         return (
             <Mutation mutation={ADD_MESSAGE_MUTATION} variables={this.state}>
                 {(createMessage, { loading, error }) => (
-                    // <button
-                    //     onClick={async () => {
-                    //         await createMessage();
-                    //     }}
-                    // >
-                    //     New Message
-                    // </button>
-                    <ChatInputBox
+                    <MessageInput
                         onKeyPress={async e => {
                             if (e.key === 'Enter') {
                                 e.preventDefault();
@@ -63,7 +62,7 @@ class AddMessage extends Component {
                             value        = {this.state.text}
                             onChange     = {e => this.setState({ text: e.target.value })}
                         />
-                    </ChatInputBox>
+                    </MessageInput>
                 )}
             </Mutation>
         );

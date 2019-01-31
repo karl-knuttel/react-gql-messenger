@@ -10,9 +10,9 @@ import Conversation from './Conversation';
 import NewConversation from './NewConversation';
 
 const PageBodyStyles = styled.main`
-    max-width      : ${props => props.theme.maxWidth};
-    padding        : 2rem;
-    padding-bottom : 0;
+    /* max-width : ${props => props.theme.maxWidth}; */
+    /* padding        : 2rem;
+    padding-bottom : 0; */
     position       : relative;
     background     : linear-gradient(0deg, rgba(76, 75, 90, 0.95), rgba(76, 75, 90, 0.95)),
         url('../img/80s-pattern-2.jpg') repeat left top;

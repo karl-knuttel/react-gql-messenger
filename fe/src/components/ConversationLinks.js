@@ -2,7 +2,6 @@ import React from 'react';
 import { Query } from 'react-apollo';
 import { Link } from 'react-router-dom';
 import gql from 'graphql-tag';
-// import { css } from 'glamor';
 import { CURRENT_USER_QUERY } from './User';
 import styled from 'styled-components';
 import ConversationLinksOnlineStatus from './ConversationLinksOnlineStatus';
@@ -47,10 +46,6 @@ const ConversationsListHeader = styled.div`
         font-size   : 1.5rem;
         font-weight : 400;
     }
-
-    /* a {
-        color : white;
-    } */
 
     span {
         position    : relative;
